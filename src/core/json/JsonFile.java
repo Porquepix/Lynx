@@ -6,6 +6,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.logging.log4j.LogManager;
+
+import core.Core;
 import core.exception.LynxException;
 
 public class JsonFile {
@@ -26,6 +29,7 @@ public class JsonFile {
 			try {
 				this.content = new JsonContent(this);
 			} catch (IOException e) {
+				LogManager.getLogger(Core.LOGGER_ERROR).fatal(e);
 				throw new LynxException("Impossible to read the JsonFile: " + this.getPath().toString());
 			}
 		}

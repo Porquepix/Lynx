@@ -60,6 +60,20 @@ public class JsonContent {
 		return ret != null ? new InnerJsonContent(ret) : defaultValue; 
 	}
 	
+	public JsonContent safeGetAsObject(String key, JsonContent defaultValue) {
+		JsonContent content = this.getAsObject(key, defaultValue);
+		content.fillIfNotExists(defaultValue);
+		return content;
+	}
+	
+	private void fillIfNotExists(JsonContent defaultValue) {
+		for (Entry<String, Object> e : defaultValue.content.entrySet()) {
+			if (!this.content.containsKey(e.getKey())) {
+				this.put(e.getKey(), e.getValue());
+			}
+		}
+	}
+
 	public void put(String key, Object value) {
 		this.content.put(key, value);
 	}
