@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import core.json.JsonContent;
 import core.json.JsonFile;
 
 public class JsonFileTest {
@@ -31,6 +32,13 @@ public class JsonFileTest {
 		Path p1 = Paths.get("vendor/test/test.json");
 		JsonFile fileExists = new JsonFile(p1);
 		assertTrue(fileExists.exists());
+	}
+	
+	@Test
+	public void testSetContent() {
+		JsonFile fileFromString = new JsonFile("vendor/test/test.json");
+		fileFromString.setContent(new JsonContent());
+		assertEquals(new JsonContent(), fileFromString.getContent());
 	}
 
 }

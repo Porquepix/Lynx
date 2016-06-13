@@ -6,15 +6,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.logging.log4j.LogManager;
-
-import core.Core;
 import core.exception.LynxException;
+import core.logging.Log;
 
 public class JsonFile {
 	
 	private Path path;
 	private JsonContent content;
+	private boolean loaded;
 	
 	public JsonFile(String path) {
 		this(Paths.get(path));
@@ -22,22 +21,41 @@ public class JsonFile {
 	
 	public JsonFile(Path path) {
 		this.path = path;
+		this.loaded = false;
+		this.content = new JsonContent();
+	}
+	
+	public JsonFile loadContent() {
+		if (this.content.isEmpty() && this.exists()) {
+			try {
+				this.content = new JsonContent(this);
+				this.loaded = true;
+			} catch (IOException e) {
+				Log.get().error("IOException file {}", e, this.path.toString());
+			}
+		}
+		return this;
+	}
+	
+	public JsonFile loadContentOrFail() {
+		this.loadContent();
+		if (!this.isLoaded()) {
+			throw new LynxException("Impossible to read the JsonFile: " + this.getPath().toString());				
+		}
+		return this;
+	}
+	
+	public boolean isLoaded() {
+		return this.loaded;
 	}
 	
 	public JsonContent getContent() {
-		if (this.content == null && this.exists()) {
-			try {
-				this.content = new JsonContent(this);
-			} catch (IOException e) {
-				LogManager.getLogger(Core.LOGGER_ERROR).fatal(e);
-				throw new LynxException("Impossible to read the JsonFile: " + this.getPath().toString());
-			}
-		}
 		return this.content;
 	}
 	
 	public void setContent(JsonContent content) {
 		this.content = content;
+		this.loaded = false;
 	}
 	
 	public void write() throws IOException {

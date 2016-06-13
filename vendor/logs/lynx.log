@@ -1,0 +1,21 @@
+[WARN] 2016-06-13 08:09:44,888 [main] - Application running in debug mode.
+[INFO] 2016-06-13 08:09:44,889 [main] - Core has successfuly started...
+[WARN] 2016-06-13 08:17:14,964 [main] - Application running in debug mode.
+[INFO] 2016-06-13 08:17:14,964 [main] - Core has successfuly started...
+[WARN] 2016-06-13 10:40:34,487 [main] - Application running in debug mode.
+[INFO] 2016-06-13 10:40:34,488 [main] - Core has successfuly started...
+[ERROR] 2016-06-13 10:41:56,991 [main] - IOException file app.conf
+java.io.IOException
+	at core.json.JsonFile.loadContent(JsonFile.java:33) [bin/:?]
+	at core.Core.<init>(Core.java:17) [bin/:?]
+	at Lynx.main(Lynx.java:7) [bin/:?]
+[WARN] 2016-06-13 10:41:57,000 [main] - Application running in debug mode.
+[INFO] 2016-06-13 10:41:57,000 [main] - Core has successfuly started...
+[ERROR] 2016-06-13 10:41:57,001 [main] - IOException file app.conf
+java.io.IOException
+	at core.json.JsonFile.loadContent(JsonFile.java:33) [bin/:?]
+	at core.json.JsonFile.loadContentOrFail(JsonFile.java:42) [bin/:?]
+	at Lynx.main(Lynx.java:9) [bin/:?]
+[WARN] 2016-06-13 14:32:52,035 [main] - Range validation failled: unknow type core.game.Request@6ebc05a6
+[WARN] 2016-06-13 14:34:19,719 [main] - Range validation failled: unknow type class core.game.Request
+[WARN] 2016-06-13 15:27:04,135 [main] - Range validation failled: unknow type class core.game.Request

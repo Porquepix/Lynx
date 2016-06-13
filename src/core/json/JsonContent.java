@@ -2,62 +2,59 @@ package core.json;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class JsonContent {
-
-	private Map<String, Object> content;
+	
+	private JsonMapWrapper content;
 	
 	public JsonContent() {
-		this.content = new HashMap<>();
+		this.content = new JsonMapWrapper();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public JsonContent(String json) {
-		this.content = new Gson().fromJson(json, Map.class);
+		Map<String, Object> jsonMap = new Gson().fromJson(json, Map.class);
+		this.content = new JsonMapWrapper(jsonMap);
 	}
 
 	@SuppressWarnings("unchecked")
 	public JsonContent(JsonFile jsonFile) throws IOException {
 		byte[] fileContent = Files.readAllBytes(jsonFile.getPath());
-		this.content = new Gson().fromJson(new String(fileContent), Map.class);
+		Map<String, Object> jsonMap = new Gson().fromJson(new String(fileContent), Map.class);
+		this.content = new JsonMapWrapper(jsonMap);
+	}
+	
+	private JsonContent(Map<String, Object> jsonMap) {
+		this.content = new JsonMapWrapper(jsonMap);
 	}
 
 	public Boolean getAsBoolean(String key, Boolean defaultValue) {
-		Boolean ret = (Boolean) this.content.get(key);
-		return ret != null ? ret : defaultValue; 
+		return this.content.getAsBoolean(key, defaultValue);
 	}
 	
 	public Integer getAsInteger(String key, Integer defaultValue) {
-		Integer ret = ((Double) this.content.get(key)).intValue();
-		return ret != null ? ret : defaultValue; 
+		return this.content.getAsInteger(key, defaultValue);
 	}
 	
 	public Double getAsDouble(String key, Double defaultValue) {
-		Double ret = (Double) this.content.get(key);
-		return ret != null ? ret : defaultValue; 
+		return this.content.getAsDouble(key, defaultValue);
 	}
 	
 	public String getAsString(String key, String defaultValue) {
-		String ret = (String) this.content.get(key);
-		return ret != null ? ret : defaultValue; 
+		return this.content.getAsString(key, defaultValue);
 	}
 	
 	public List<?> getAsArray(String key, List<?> defaultValue) {
-		List<?> ret = (List<?>) this.content.get(key);
-		return ret != null ? ret : defaultValue; 
+		return this.content.getAsArray(key, defaultValue);
 	}
 	
 	public JsonContent getAsObject(String key, JsonContent defaultValue) {
-		Map<?, ?> ret = (Map<?, ?>) this.content.get(key);
-		return ret != null ? new InnerJsonContent(ret) : defaultValue; 
+		return new JsonContent(this.content.getAsObject(key, defaultValue.getJsonMap()));
 	}
 	
 	public JsonContent safeGetAsObject(String key, JsonContent defaultValue) {
@@ -67,11 +64,7 @@ public class JsonContent {
 	}
 	
 	private void fillIfNotExists(JsonContent defaultValue) {
-		for (Entry<String, Object> e : defaultValue.content.entrySet()) {
-			if (!this.content.containsKey(e.getKey())) {
-				this.put(e.getKey(), e.getValue());
-			}
-		}
+		this.content.fillIfNotExists(defaultValue.getJsonMap());
 	}
 
 	public void put(String key, Object value) {
@@ -83,16 +76,20 @@ public class JsonContent {
 	}
 	
 	public Map<String, Object> getJsonMap() {
-		return Collections.unmodifiableMap(this.content);
+		return this.content.getMap();
 	}
 
 	public byte[] toByteArray() {
+		return this.toString().getBytes();
+	}
+	
+	public String toString() {
 		Gson gson = new GsonBuilder()
-			.setPrettyPrinting()
-			.excludeFieldsWithoutExposeAnnotation()
-			.registerTypeHierarchyAdapter(JsonContent.class, new JsonContentSerializer())
-			.create();
-		return gson.toJson(this.content).getBytes();
+		.setPrettyPrinting()
+		.excludeFieldsWithoutExposeAnnotation()
+		.registerTypeHierarchyAdapter(JsonContent.class, new JsonContentSerializer())
+		.create();
+		return gson.toJson(this); 
 	}
 	
 	public boolean equals(Object o) {
@@ -106,30 +103,9 @@ public class JsonContent {
 		}
 		return false;
 	}
-	
-	private class InnerJsonContent extends JsonContent {
 
-		private Map<String, Object> originalMap;
-		
-		@SuppressWarnings("unchecked")
-		private InnerJsonContent(Map<?, ?> map) {
-			super();
-			this.originalMap = (Map<String, Object>) map;
-			for (Entry<?, ?> e : map.entrySet()) {
-				this.put((String) e.getKey(), e.getValue());
-			}
-		}
-		
-		public void put(String key, Object value) {
-			super.put(key, value);
-			this.originalMap.put(key, value);
-		}
-		
-		public void remove(String key) {
-			super.remove(key);
-			this.originalMap.remove(key);
-		}
-		
+	public boolean isEmpty() {
+		return this.content.isEmpty();
 	}
 
 }

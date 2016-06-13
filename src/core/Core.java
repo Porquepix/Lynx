@@ -1,38 +1,35 @@
 package core;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Level;
 
 import core.config.Config;
-import core.config.DefaultSettings;
+import core.game.GameManager;
 import core.json.JsonContent;
+import core.logging.Log;
 
 
 public class Core {
 	
-	public static final String LOGGER_DEBUG = "logger.debug";
-	public static final String LOGGER_ERROR = "logger.error";
+	public static boolean DEBUG = false;
 	
 	private JsonContent settings;
-	private boolean debug;
+	private GameManager gameManager;
 	
 	public Core() {
-		this.settings = Config.APP.getContent();
+		this.settings = Config.APP.loadContent().getContent();
 		loadSettings();
-		LogManager.getLogger(LOGGER_DEBUG).info("Core has successfuly started...");
+		if (DEBUG) {
+			Log.get().setLevel(Level.DEBUG);
+			Log.get().warn("Application running in debug mode.");
+		}
+		
+		this.gameManager = new GameManager();
+		
+		Log.get().info("Core has successfuly started...");
 	}
 
 	private void loadSettings() {
-		this.debug = settings.getAsBoolean("debug", DefaultSettings.DEBUG);
-		loadLoggerSettings();
-	}
-
-	private void loadLoggerSettings() {
-		long ms = System.currentTimeMillis(); 
-		JsonContent logSettings = settings.safeGetAsObject("log4j", DefaultSettings.LOG);
-		System.setProperty("log4j.configurationFile", logSettings.getAsString("conf", ""));
-		System.setProperty("logger.debug.path", logSettings.getAsString("debug", "") + ms);
-		System.setProperty("logger.debug.active", this.debug ? "all" : "off");
-		System.setProperty("logger.error.path", logSettings.getAsString("error", "") + ms);
+		DEBUG = settings.getAsBoolean("debug", DEBUG);
 	}
 
 }
