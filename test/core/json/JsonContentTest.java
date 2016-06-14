@@ -1,4 +1,4 @@
-package test.core.json;
+package core.json;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,7 @@ import core.json.JsonFile;
 
 public class JsonContentTest {
 	
-	private static JsonContent testContent = new JsonFile("vendor/test/test.json").getContent();
+	private static JsonContent testContent = new JsonFile("vendor/test/test.json").loadContent().getContent();
 	
 	@Test
 	public void testConstructor() {

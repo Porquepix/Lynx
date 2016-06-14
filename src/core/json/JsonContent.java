@@ -53,7 +53,8 @@ public class JsonContent {
 		return this.content.getAsArray(key, defaultValue);
 	}
 	
-	public JsonContent getAsObject(String key, JsonContent defaultValue) {
+	public JsonContent getAsObject(String key, JsonContent defaultValue) {	
+		
 		return new JsonContent(this.content.getAsObject(key, defaultValue.getJsonMap()));
 	}
 	

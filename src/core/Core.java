@@ -13,7 +13,9 @@ public class Core {
 	public static boolean DEBUG = false;
 	
 	private JsonContent settings;
-	private GameManager gameManager;
+	
+	// CHANGE VISIBYLITY
+	public GameManager gameManager;
 	
 	public Core() {
 		this.settings = Config.APP.loadContent().getContent();
@@ -25,7 +27,7 @@ public class Core {
 		
 		this.gameManager = new GameManager();
 		
-		Log.get().info("Core has successfuly started...");
+		Log.get().info("Core has successfully started...");
 	}
 
 	private void loadSettings() {

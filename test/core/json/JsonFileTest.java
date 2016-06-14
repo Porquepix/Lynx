@@ -1,4 +1,4 @@
-package test.core.json;
+package core.json;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

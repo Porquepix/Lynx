@@ -1,16 +1,13 @@
 import core.Core;
-import core.game.Request;
-import core.game.validation.RequestValidator;
-import core.game.validation.RequestValidatorBuilder;
-import core.game.validation.Validator;
-import core.json.JsonFile;
+import core.game.Game;
 
 public class Lynx {
 	
 	public static void main(String[] args) {
-		//Core c = new Core();
-		RequestValidator v = new RequestValidatorBuilder().type(Integer.class).range(0, 10).in(17, "hello", 3).build();
-		System.out.println(v.validate(new Request()));
+		Core c = new Core();
+		for (Game g : c.gameManager.getGames()) {
+			System.out.println(g);
+		}
 	}
 
 }

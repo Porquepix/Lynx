@@ -1,21 +1,51 @@
-[WARN] 2016-06-13 08:09:44,888 [main] - Application running in debug mode.
-[INFO] 2016-06-13 08:09:44,889 [main] - Core has successfuly started...
-[WARN] 2016-06-13 08:17:14,964 [main] - Application running in debug mode.
-[INFO] 2016-06-13 08:17:14,964 [main] - Core has successfuly started...
-[WARN] 2016-06-13 10:40:34,487 [main] - Application running in debug mode.
-[INFO] 2016-06-13 10:40:34,488 [main] - Core has successfuly started...
-[ERROR] 2016-06-13 10:41:56,991 [main] - IOException file app.conf
-java.io.IOException
-	at core.json.JsonFile.loadContent(JsonFile.java:33) [bin/:?]
-	at core.Core.<init>(Core.java:17) [bin/:?]
-	at Lynx.main(Lynx.java:7) [bin/:?]
-[WARN] 2016-06-13 10:41:57,000 [main] - Application running in debug mode.
-[INFO] 2016-06-13 10:41:57,000 [main] - Core has successfuly started...
-[ERROR] 2016-06-13 10:41:57,001 [main] - IOException file app.conf
-java.io.IOException
-	at core.json.JsonFile.loadContent(JsonFile.java:33) [bin/:?]
-	at core.json.JsonFile.loadContentOrFail(JsonFile.java:42) [bin/:?]
-	at Lynx.main(Lynx.java:9) [bin/:?]
-[WARN] 2016-06-13 14:32:52,035 [main] - Range validation failled: unknow type core.game.Request@6ebc05a6
-[WARN] 2016-06-13 14:34:19,719 [main] - Range validation failled: unknow type class core.game.Request
-[WARN] 2016-06-13 15:27:04,135 [main] - Range validation failled: unknow type class core.game.Request
+[WARN] 2016-06-14 05:47:25,539 [main] - Application running in debug mode.
+[INFO] 2016-06-14 05:47:25,611 [main] - Core has successfuly started...
+[WARN] 2016-06-14 05:48:49,828 [main] - Application running in debug mode.
+[WARN] 2016-06-14 05:48:49,830 [main] - IOException 
+java.nio.file.NoSuchFileException: games
+	at sun.nio.fs.WindowsException.translateToIOException(Unknown Source) ~[?:1.8.0_66]
+	at sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source) ~[?:1.8.0_66]
+	at sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source) ~[?:1.8.0_66]
+	at sun.nio.fs.WindowsDirectoryStream.<init>(Unknown Source) ~[?:1.8.0_66]
+	at sun.nio.fs.WindowsFileSystemProvider.newDirectoryStream(Unknown Source) ~[?:1.8.0_66]
+	at java.nio.file.Files.newDirectoryStream(Unknown Source) ~[?:1.8.0_66]
+	at core.game.GameManager.getGamesDirStream(GameManager.java:33) [bin/:?]
+	at core.game.GameManager.loadGames(GameManager.java:26) [bin/:?]
+	at core.game.GameManager.<init>(GameManager.java:22) [bin/:?]
+	at core.Core.<init>(Core.java:26) [bin/:?]
+	at Lynx.main(Lynx.java:6) [bin/:?]
+[DEBUG] 2016-06-14 05:48:49,855 [main] - Trying to create the game directory...
+[DEBUG] 2016-06-14 05:48:49,855 [main] - Game directory created...
+[INFO] 2016-06-14 05:48:49,856 [main] - Core has successfuly started...
+[WARN] 2016-06-14 05:57:40,055 [main] - Application running in debug mode.
+[INFO] 2016-06-14 05:57:40,056 [main] - Loading games.
+[INFO] 2016-06-14 05:57:40,057 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 05:57:40,057 [main] - Core has successfuly started...
+[WARN] 2016-06-14 05:59:51,910 [main] - Application running in debug mode.
+[INFO] 2016-06-14 05:59:51,911 [main] - Loading games.
+[INFO] 2016-06-14 05:59:51,912 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 05:59:51,912 [main] - Core has successfully started...
+
+
+
+
+[WARN] 2016-06-14 06:01:07,278 [main] - Application running in debug mode.
+[INFO] 2016-06-14 06:01:07,279 [main] - Loading games.
+[INFO] 2016-06-14 06:01:07,280 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 06:01:07,280 [main] - Core has successfully started...
+[WARN] 2016-06-14 06:04:50,700 [main] - Application running in debug mode.
+[INFO] 2016-06-14 06:04:50,702 [main] - Loading games.
+[INFO] 2016-06-14 06:04:50,703 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 06:04:50,703 [main] - Core has successfully started...
+[WARN] 2016-06-14 06:05:12,064 [main] - Application running in debug mode.
+[INFO] 2016-06-14 06:05:12,065 [main] - Loading games.
+[INFO] 2016-06-14 06:05:12,067 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 06:05:12,067 [main] - Core has successfully started...
+[WARN] 2016-06-14 06:28:53,716 [main] - Application running in debug mode.
+[INFO] 2016-06-14 06:28:53,717 [main] - Loading games.
+[INFO] 2016-06-14 06:28:53,719 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 06:28:53,719 [main] - Core has successfully started...
+[WARN] 2016-06-14 06:29:15,778 [main] - Application running in debug mode.
+[INFO] 2016-06-14 06:29:15,779 [main] - Loading games.
+[INFO] 2016-06-14 06:29:15,780 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 06:29:15,780 [main] - Core has successfully started...
