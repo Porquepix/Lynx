@@ -1,13 +1,16 @@
+import java.nio.file.Paths;
+
+import bsh.EvalError;
 import core.Core;
-import core.game.Game;
+import core.translation.TranslateManager;
 
 public class Lynx {
 	
-	public static void main(String[] args) {
-		Core c = new Core();
-		for (Game g : c.gameManager.getGames()) {
-			System.out.println(g);
-		}
+	public static void main(String[] args) throws EvalError {
+		//Core c = new Core();
+		TranslateManager tm = new TranslateManager(Paths.get("vendor"), "fr");
+		System.out.println(tm.translate("Hello World !"));
+		System.out.println(tm.translate("t$test.test"));
 	}
 
 }

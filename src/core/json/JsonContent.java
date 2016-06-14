@@ -1,6 +1,7 @@
 package core.json;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,8 @@ public class JsonContent {
 	@SuppressWarnings("unchecked")
 	public JsonContent(JsonFile jsonFile) throws IOException {
 		byte[] fileContent = Files.readAllBytes(jsonFile.getPath());
-		Map<String, Object> jsonMap = new Gson().fromJson(new String(fileContent), Map.class);
+		String fileContentAsString = new String(fileContent, StandardCharsets.UTF_8);
+		Map<String, Object> jsonMap = new Gson().fromJson(fileContentAsString, Map.class);
 		this.content = new JsonMapWrapper(jsonMap);
 	}
 	

@@ -1,0 +1,35 @@
+{
+    "start": {
+        "init": "i = 0; j = 1;",
+        "text": "Hello",
+        "type": "message",
+        "next": [
+            {
+                "condition": "i == 0",
+                "context": "iE0"
+            },
+            {
+                "condition": "j == 1",
+                "context": "jE1"
+            },
+            {
+                "context": "default"
+            } 
+        ]
+    },
+
+    ""
+}
+
+
+
+text --required
+text to display
+if the text starts with 't$', the string which follows the $ is a translate id
+
+type --required
+type of the context
+    -> message: only a message
+    -> answer: message with answers input
+    -> integer: message with integer input
+    -> string: message with string input

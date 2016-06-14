@@ -10,8 +10,9 @@ import core.logging.Log;
 
 public class Core {
 	
+	public static final String MISSING_DATA = "Missing data !";
 	public static boolean DEBUG = false;
-	
+
 	private JsonContent settings;
 	
 	// CHANGE VISIBYLITY

@@ -49,3 +49,53 @@ java.nio.file.NoSuchFileException: games
 [INFO] 2016-06-14 06:29:15,779 [main] - Loading games.
 [INFO] 2016-06-14 06:29:15,780 [main] - Games have successfully loaded.
 [INFO] 2016-06-14 06:29:15,780 [main] - Core has successfully started...
+[WARN] 2016-06-14 07:09:46,101 [main] - Application running in debug mode.
+[INFO] 2016-06-14 07:09:46,103 [main] - Loading games.
+[INFO] 2016-06-14 07:09:46,104 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 07:09:46,104 [main] - Core has successfully started...
+[WARN] 2016-06-14 07:09:56,273 [main] - Application running in debug mode.
+[INFO] 2016-06-14 07:09:56,274 [main] - Loading games.
+[INFO] 2016-06-14 07:09:56,276 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 07:09:56,276 [main] - Core has successfully started...
+[WARN] 2016-06-14 08:06:45,433 [main] - Application running in debug mode.
+[INFO] 2016-06-14 08:06:45,434 [main] - Loading games.
+[INFO] 2016-06-14 08:06:45,436 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 08:06:45,436 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:13:16,165 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:13:16,166 [main] - Loading games.
+[WARN] 2016-06-14 11:14:30,446 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:14:30,447 [main] - Loading games.
+[INFO] 2016-06-14 11:14:30,450 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:14:30,450 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:15:47,285 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:15:47,286 [main] - Loading games.
+[INFO] 2016-06-14 11:15:47,288 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:15:47,288 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:40:13,462 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:40:13,463 [main] - Loading games.
+[INFO] 2016-06-14 11:40:13,466 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:40:13,466 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:40:50,900 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:40:50,901 [main] - Loading games.
+[INFO] 2016-06-14 11:40:50,903 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:40:50,903 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:47:34,190 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:47:34,191 [main] - Loading games.
+[INFO] 2016-06-14 11:47:34,193 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:47:34,193 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:47:58,856 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:47:58,857 [main] - Loading games.
+[INFO] 2016-06-14 11:47:58,859 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:47:58,859 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:48:50,420 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:48:50,421 [main] - Loading games.
+[INFO] 2016-06-14 11:48:50,424 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:48:50,424 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:49:27,388 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:49:27,389 [main] - Loading games.
+[INFO] 2016-06-14 11:49:27,391 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:49:27,391 [main] - Core has successfully started...
+[WARN] 2016-06-14 11:50:15,605 [main] - Application running in debug mode.
+[INFO] 2016-06-14 11:50:15,607 [main] - Loading games.
+[INFO] 2016-06-14 11:50:15,609 [main] - Games have successfully loaded.
+[INFO] 2016-06-14 11:50:15,610 [main] - Core has successfully started...
