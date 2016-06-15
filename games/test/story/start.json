@@ -1,0 +1,6 @@
+{
+    "start": {
+        "init": "i = 1; j = \"Hello World !\"",
+        "text": "t$story.start.intro"
+    }
+}

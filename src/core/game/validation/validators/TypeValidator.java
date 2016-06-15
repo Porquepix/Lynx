@@ -18,8 +18,7 @@ public class TypeValidator implements Validator {
 
 	@Override
 	public boolean validate(Request r) {
-		Class<?> data = r.getInputType();
-		return this.clazz.getName().equals(data.getName());
+		return r.typeEquals(clazz);
 	}
 
 }

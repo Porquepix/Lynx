@@ -43,17 +43,23 @@ public class TranslateManager {
 		int lastDelimiter = s.lastIndexOf(ID_DELIMITER);
 		
 		String file = s.substring(0, lastDelimiter).replace(ID_DELIMITER, "/");
-		JsonContent json = null;
-		if (this.cache.containsKey(file)) {
-			json = this.cache.get(file);
-		} else {
-			Path finalPath = root.resolve(String.format(URI_FORMAT, this.lang, file));
-			json = new JsonFile(finalPath).loadContent().getContent();
-			this.cache.put(file, json);
-		}
+		JsonContent json = getJsonContent(file);
 		
 		String key = s.substring(lastDelimiter + 1);		
 		return json.getAsString(key, Core.MISSING_DATA);
+	}
+
+	private JsonContent getJsonContent(String file) {
+		if (!this.cache.containsKey(file)) {
+			this.loadJsonContent(file);
+		}
+		return this.cache.get(file);
+	}
+
+	private void loadJsonContent(String file) {
+		Path finalPath = root.resolve(String.format(URI_FORMAT, this.lang, file));
+		JsonContent json = new JsonFile(finalPath).loadContent().getContent();
+		this.cache.put(file, json);
 	}
 
 }
