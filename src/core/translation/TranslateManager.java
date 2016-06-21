@@ -1,16 +1,15 @@
 package core.translation;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import core.cache.Cache;
 import core.cache.LruCache;
-import core.json.JsonFile;
 
 public class TranslateManager {
 	
 	private static final String TRANSLATION_ID_START = "t$";
 	private static final String ID_DELIMITER = ".";
-	private static final String URI_FORMAT = "lang/%s/%s.json"; 
 	
 	private Path root;
 	private String lang;
@@ -57,8 +56,8 @@ public class TranslateManager {
 
 	private void loadTranslator(String fileId) {
 		String filePath = fileId.replace(ID_DELIMITER, "/");
-		Path finalPath = root.resolve(String.format(URI_FORMAT, this.lang, filePath));
-		this.cache.add(fileId, new Translator(new JsonFile(finalPath)));
+		Translator translator = new Translator(this.root, this.lang, Paths.get(filePath));
+		this.cache.add(fileId, translator);
 	}
 
 }

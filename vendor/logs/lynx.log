@@ -26,3 +26,7 @@
 [INFO] 2016-06-21 12:40:11,622 [main] - Loading games.
 [INFO] 2016-06-21 12:40:11,625 [main] - Games have successfully loaded.
 [INFO] 2016-06-21 12:40:11,625 [main] - Core has successfully started...
+[WARN] 2016-06-21 14:33:02,208 [main] - Application running in debug mode.
+[INFO] 2016-06-21 14:33:02,210 [main] - Loading games.
+[INFO] 2016-06-21 14:33:02,213 [main] - Games have successfully loaded.
+[INFO] 2016-06-21 14:33:02,213 [main] - Core has successfully started...
