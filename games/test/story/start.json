@@ -1,6 +1,25 @@
 {
     "start": {
         "init": "i = 1; j = \"Hello World !\"",
-        "text": "t$story.start.intro"
+        "text": "t$story.start.intro",
+        "answer": {
+            "type": "answer"
+        },
+        "answers": [
+            "Ok",
+            "t$story.start.a1"
+        ],
+        "next": [
+            {
+                "condition": "__answer == 1",
+                "context": "start.start2"
+            },
+            {
+                "context": "start.start"
+            }
+        ]
+    },
+    "start2": {
+        "text": "Ok2"
     }
 }

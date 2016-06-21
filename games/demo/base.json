@@ -1,3 +1,9 @@
 {
-    "name": "Lynx Demo Game"
+    "name": "t$base.name",
+    "description": "t$base.description",
+    "langs": ["fr"],
+    "lang": "fr",
+    "declare": [],
+    "boot": "consil0.0",
+    "save": false
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import bsh.EvalError;
 import core.game.context.Context;
 import core.game.context.ContextManager;
+import core.game.context.ContextType;
 import core.logging.Log;
 import core.translation.TranslateManager;
 
@@ -71,11 +72,17 @@ public class Game implements Comparable<Game> {
 	}
 	
 	public String getCurrentText() {
-		return this.currentContext.getText();
-	}
-	
-	public Class<?> getAttendedType() {
-		return this.currentContext.getAttendedType();
+		String message = this.currentContext.getText();
+		if (this.currentContext.getAttendedType().equals(ContextType.ANSWER)) {
+			int i = 0;
+			message += "\n";
+			for (String answer : this.currentContext.getAnswers()) {
+				message += i + " - " + this.translator.translate(answer) + "\n";
+				i++;
+			}
+			message = message.substring(0, message.length() - 1);
+		}
+		return message;
 	}
 	
 	public void saveContextVariable() {

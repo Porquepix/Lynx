@@ -28,14 +28,20 @@ public class Lynx {
 		while (true) {
 			System.out.print(g.getCurrentText());
 			
-			input = null;
-			do {
-				if (input != null) {
+			input = "";
+			boolean first = false;
+			while (!g.nextContext(new Request(input))) {
+				if (first) {
 					System.out.print("Wrong anwser");
+				} else {
+					first = !first;
 				}
 				System.out.print("\n$> ");
 				input = new Scanner(System.in).nextLine();	
-			} while (!g.nextContext(new Request(input)));
+			}
+			if (!first) {
+				System.out.print("\n");
+			}
 		}
 	}
 

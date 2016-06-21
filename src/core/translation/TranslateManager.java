@@ -1,11 +1,9 @@
 package core.translation;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
-import core.Core;
-import core.json.JsonContent;
+import core.cache.Cache;
+import core.cache.LruCache;
 import core.json.JsonFile;
 
 public class TranslateManager {
@@ -16,12 +14,12 @@ public class TranslateManager {
 	
 	private Path root;
 	private String lang;
-	private Map<String, JsonContent> cache;
+	private Cache<String, Translator> cache;
 	
 	public TranslateManager(Path root, String lang) {
 		this.root = root;
 		this.lang = lang;
-		this.cache = new HashMap<>();
+		this.cache = new LruCache<>(10);
 	}
 	
 	public String getLang() {
@@ -34,32 +32,33 @@ public class TranslateManager {
 	
 	public String translate(String s) {
 		if (s.startsWith(TRANSLATION_ID_START)) {
-			return translateFromFile(s.substring(TRANSLATION_ID_START.length()));
+			return translateWithTranslator(s);
+		} else {
+			return s;					
 		}
-		return s;		
 	}
 
-	private String translateFromFile(String s) {
-		int lastDelimiter = s.lastIndexOf(ID_DELIMITER);
+	private String translateWithTranslator(String s) {
+		String translationId = s.substring(TRANSLATION_ID_START.length());
 		
-		String file = s.substring(0, lastDelimiter).replace(ID_DELIMITER, "/");
-		JsonContent json = getJsonContent(file);
+		int lastDelimiter = translationId.lastIndexOf(ID_DELIMITER);
+		String fileId = translationId.substring(0, lastDelimiter);
+		Translator translator = this.getTranslator(fileId);
 		
-		String key = s.substring(lastDelimiter + 1);		
-		return json.getAsString(key, Core.MISSING_DATA);
+		return translator.translate(translationId.substring(lastDelimiter + 1));
 	}
 
-	private JsonContent getJsonContent(String file) {
-		if (!this.cache.containsKey(file)) {
-			this.loadJsonContent(file);
+	private Translator getTranslator(String fileId) {
+		if (!this.cache.containsKey(fileId)) {
+			this.loadTranslator(fileId);
 		}
-		return this.cache.get(file);
+		return this.cache.get(fileId);
 	}
 
-	private void loadJsonContent(String file) {
-		Path finalPath = root.resolve(String.format(URI_FORMAT, this.lang, file));
-		JsonContent json = new JsonFile(finalPath).loadContent().getContent();
-		this.cache.put(file, json);
+	private void loadTranslator(String fileId) {
+		String filePath = fileId.replace(ID_DELIMITER, "/");
+		Path finalPath = root.resolve(String.format(URI_FORMAT, this.lang, filePath));
+		this.cache.add(fileId, new Translator(new JsonFile(finalPath)));
 	}
 
 }

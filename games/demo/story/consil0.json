@@ -1,0 +1,94 @@
+{
+    "0": {
+        "text": "t$consil0.0",
+        "answer": {
+            "type": "void"
+        },
+        "next": [
+            {
+                "context": "consil0.1"
+            }
+        ]
+    },
+    "1": {
+        "text": "t$consil0.1",
+        "answer": {
+            "type": "answer"
+        },
+        "answers": [
+            "t$consil0.1_a1",
+            "t$consil0.1_a2"
+        ],
+        "next": [
+            {
+                "condition": "__answer == 0",
+                "context": "consil0.2"
+            },
+            {
+                "condition": "__answer == 1",
+                "context": "consil0.4"
+            }
+        ]
+    },
+    "2": {
+        "text": "t$consil0.2",
+        "answer": {
+            "type": "void"
+        },
+        "next": [
+            {
+                "context": "consil0.3"
+            }
+        ]
+    },
+    "3": {
+        "text": "t$consil0.3",
+        "answer": {
+            "type": "void"
+        },
+        "next": [
+            {
+                "context": "consil0.6"
+            }
+        ]
+    },
+    "4": {
+        "text": "t$consil0.4",
+        "answer": {
+            "type": "void"
+        },
+        "next": [
+            {
+                "context": "consil0.5"
+            }
+        ]
+    },
+    "5": {
+        "text": "t$consil0.5",
+        "answer": {
+            "type": "void"
+        },
+        "next": [
+            {
+                "context": "consil0.6"
+            }
+        ]
+    },
+    "6": {
+        "text": "t$consil0.6",
+        "answer": {
+            "type": "void"
+        },
+        "next": [
+            {
+                "context": "consil0.7"
+            }
+        ]
+    },
+    "7": {
+        "text": "t$consil0.7",
+        "answer": {
+            "type": "void"
+        }
+    }
+}

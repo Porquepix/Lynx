@@ -33,12 +33,12 @@ public class ContextManager {
 		String key = contextID.substring(lastDelimiter + 1);
 		JsonContent frame = json.getAsObject(key, new JsonContent());
 		try {
-			Context c =  new Context(game.getVariables(), frame);
+			Context c =  new Context(contextID, game.getVariables(), frame);
 			c.setTranslator(game.getTranslator());
 			return c;
 		} catch (EvalError e) {
 			Log.get().error("Impossible to build context {}", e, contextID);
-			throw new LynxException("Impossible to build context : game corrupted.");
+			throw new LynxException("Internal error : game corrupted.");
 		}
 	}
 

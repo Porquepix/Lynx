@@ -9,54 +9,76 @@ public class RequestHandler {
 	
 	private JsonContent content;
 	private RequestValidator validator;
-	private Class<?> attendedType;
+	private ContextType attendedType;
+	private Request lastRequest;
 	
 	public RequestHandler(JsonContent content) {
 		this.content = content;
-		this.attendedType = getClassForName(this.content.getAsString("type", "integer"));
+		this.attendedType = ContextType.getByName(this.content.getAsString("type", "void"));
 		this.validator = this.buildValidator();
+		this.lastRequest = null;
 	}
 
-	public boolean isValidRequest(Request r) {
+	public boolean isValidRequest(Request r) {		
 		Request request = r;
-		if (!request.typeEquals(this.attendedType)) {
+		if (!request.typeEquals(this.getAttendedClass())) {
 			request = this.rebuildWithAttendedType(r);
 		}
+		this.lastRequest = request;
 		return this.validator.validate(request);
 	}
 	
 	private Request rebuildWithAttendedType(Request r) {
-		if (attendedType.equals(Integer.class)) {
+		if (this.getAttendedClass().equals(Integer.class)) {
 			return r.toInteger();
-		} else if (attendedType.equals(Double.class)) {
+		} else if (this.getAttendedClass().equals(Double.class)) {
 			return r.toDouble();
 		}
 		return r;
 	}
 
-	public Class<?> getAttendedType() {
+	public ContextType getAttendedType() {
 		return this.attendedType;
+	}
+	
+	public Class<?> getAttendedClass() {
+		return this.getAttendedType().getClazz();
+	}
+	
+	public boolean isVoidAttended() {
+		return this.getAttendedType().equals(ContextType.VOID);
+	}
+	
+	public boolean isAnswerAttended() {
+		return this.getAttendedType().equals(ContextType.ANSWER);
 	}
 	
 	private RequestValidator buildValidator() {
 		RequestValidatorBuilder builder  = new RequestValidatorBuilder();
 
-		Class<?> clazz = this.getAttendedType();
+		Class<?> clazz = this.getAttendedClass();
 		builder.type(clazz);
+		
+		buildRange(builder);
 			
 		return builder.build();
 	}
 
-	private Class<?> getClassForName(String clazz) {
-		switch (clazz) {
-		case "string":
-			return String.class;
-		case "double":
-			return Double.class;
-		case "integer":
-		default:
-			return Integer.class;
+	private void buildRange(RequestValidatorBuilder builder) {
+		if (this.isAnswerAttended()) {
+			builder.range(0, 10);
+		} else {
+			JsonContent jc = this.content.getAsObject("range", new JsonContent());
+			if (!jc.isEmpty()) {
+				if (this.getAttendedType().equals(Integer.class) || this.getAttendedType().equals(Double.class) || this.getAttendedType().equals(String.class)) {
+					builder.range(jc.getAsDouble("min", Double.NaN), jc.getAsDouble("max", Double.NaN));
+				}
+			}			
 		}
+	}
+
+	public Object getInputAsRealType() {
+		return this.lastRequest.getInput();
 	}
 
 
