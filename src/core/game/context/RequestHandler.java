@@ -2,7 +2,7 @@ package core.game.context;
 
 import core.game.Request;
 import core.game.validation.RequestValidator;
-import core.game.validation.RequestValidatorBuilder;
+import core.game.validation.GlobalValidatorBuilder;
 import core.json.JsonContent;
 
 public class RequestHandler {
@@ -54,7 +54,7 @@ public class RequestHandler {
 	}
 	
 	private RequestValidator buildValidator() {
-		RequestValidatorBuilder builder  = new RequestValidatorBuilder();
+		GlobalValidatorBuilder builder  = new GlobalValidatorBuilder();
 
 		Class<?> clazz = this.getAttendedClass();
 		builder.type(clazz);
@@ -64,7 +64,7 @@ public class RequestHandler {
 		return builder.build();
 	}
 
-	private void buildRange(RequestValidatorBuilder builder) {
+	private void buildRange(GlobalValidatorBuilder builder) {
 		if (this.isAnswerAttended()) {
 			builder.range(0, 10);
 		} else {

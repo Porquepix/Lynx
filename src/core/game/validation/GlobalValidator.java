@@ -1,25 +1,25 @@
 package core.game.validation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import core.exception.LynxException;
 import core.game.Request;
 import core.logging.Log;
 
-public class RequestValidator {
+public class GlobalValidator implements Validator {
 	
 	private List<Validator> validators;
 	
-	protected RequestValidator(RequestValidatorBuilder builder) {
-		this.validators = builder.validators;
+	protected GlobalValidator(GlobalValidatorBuilder builder) {
+		this.validators = new ArrayList<>(builder.validators);
 	}
 	
-	public boolean validate(Request r) {
+	@Override
+	public boolean validate(Object data) {
 		boolean valid = true;
 		for (Validator v : this.validators) {
-			if (v.isValidatable()) {
-				valid &= v.validate(r);
-			}
+			valid &= v.validate(data);
 		}
 		return valid;
 	}
@@ -32,6 +32,4 @@ public class RequestValidator {
 		}
 		return ret;
 	}
-
-
 }

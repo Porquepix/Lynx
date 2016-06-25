@@ -1,6 +1,7 @@
 package core.game.validation.validators;
 
-import core.game.Request;
+import java.util.Objects;
+
 import core.game.validation.Validator;
 
 public class TypeValidator implements Validator {
@@ -8,17 +9,15 @@ public class TypeValidator implements Validator {
 	private Class<?> clazz;
 
 	public TypeValidator(Class<?> clazz) {
-		this.clazz = clazz;
-	}
-	
-	@Override
-	public boolean isValidatable() {
-		return true;
+		this.clazz = Objects.requireNonNull(clazz);
 	}
 
 	@Override
-	public boolean validate(Request r) {
-		return r.typeEquals(clazz);
+	public boolean validate(Object data) {
+		if (data == null) 
+			return false;
+		
+		return data.getClass().equals(this.clazz);
 	}
 
 }

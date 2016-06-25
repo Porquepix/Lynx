@@ -1,6 +1,5 @@
 package core.game.validation.validators;
 
-import core.game.Request;
 import core.game.validation.Validator;
 import core.logging.Log;
 
@@ -12,29 +11,31 @@ public class RangeValidator implements Validator {
 	public RangeValidator(double min, double max) {
 		if (min > max)
 			throw new IllegalArgumentException("The right bound of the range must be greater or equal than the left bound.");
+		if (min == Double.NaN || max == Double.NaN)
+			throw new IllegalArgumentException("The bounds must be numbers.");
 
 		this.min = min;
 		this.max = max;
 	}
 
 	@Override
-	public boolean isValidatable() {
-		return this.min != Double.NaN && this.max != Double.NaN;
-	}
-
-	@Override
-	public boolean validate(Request r) {
-		Object data = r.getInput();
+	public boolean validate(Object data) {
 		if (data instanceof String) {
-			String s = (String) data;
-			return this.min <= s.length() && s.length() < this.max;
+			return validateString((String) data);
 		} else if (data instanceof Number) {
-			Number n = (Number) data;
-			return this.min <= n.doubleValue() && n.doubleValue() < this.max;
+			return validateNumber((Number) data);
 		} else {
 			Log.get().warn("Range validation failled: unknow type {}", data.getClass());
 			return false;
 		}
+	}
+
+	private boolean validateString(String data) {
+		return this.min <= data.length() && data.length() < this.max;
+	}
+	
+	private boolean validateNumber(Number data) {
+		return this.min <= data.doubleValue() && data.doubleValue() < this.max;
 	}
 
 }

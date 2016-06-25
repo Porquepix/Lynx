@@ -9,7 +9,7 @@ import core.game.Game;
 import core.game.GameManager;
 import core.game.Request;
 import core.game.validation.RequestValidator;
-import core.game.validation.RequestValidatorBuilder;
+import core.game.validation.GlobalValidatorBuilder;
 import core.json.JsonContent;
 import core.logging.Log;
 
@@ -50,7 +50,7 @@ public class Core {
 	}
 	
 	private boolean isValidGameNumber(Request r) {
-		RequestValidator v = new RequestValidatorBuilder()
+		RequestValidator v = new GlobalValidatorBuilder()
 			.type(Integer.class)
 			.range(0, this.getGames().size())
 			.build();
