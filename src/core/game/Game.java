@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import bsh.EvalError;
-import core.game.context.Context;
-import core.game.context.ContextManager;
-import core.game.context.ContextType;
+import core.exception.LynxException;
+import core.game.interpreter.InterpreterFrame;
 import core.logging.Log;
 import core.translation.TranslateManager;
 
@@ -19,19 +18,29 @@ public class Game implements Comparable<Game> {
 	private GameInfo info;
 	private Map<String, Object> variables;
 	private TranslateManager translator;
-	private ContextManager contextManager;
-	private Context currentContext;
+	private Node currentNode;
+	private InterpreterFrame interpreter;
 	
 	public Game(Path gameDir, GameInfo info) {
 		this.root = gameDir;
 		this.info = info;
 		this.variables = null;
-		this.contextManager = new ContextManager(this);
+		this.interpreter = null;
+	}
+	
+	protected static void gameCorruptedException() {
+		throw new LynxException("Internal error : game corrupted.");
 	}
 	
 	public void start() {
 		this.variables = buildVariablesMap(info.getVariables());
-		this.currentContext = contextManager.loadContext(info.getStartingPoint());
+		this.currentNode = Node.getFromId(info.getStartingPoint(), this);
+		try {
+			this.interpreter = new InterpreterFrame(this.variables);
+		} catch (EvalError e) {
+			Log.get().error("Impossible to start interpreter !", e);
+			gameCorruptedException();
+		}
 	}
 
 	private Map<String, Object> buildVariablesMap(List<String> vars) {
@@ -71,35 +80,43 @@ public class Game implements Comparable<Game> {
 		return this.translator;
 	}
 	
-	public String getCurrentText() {
-		String message = this.currentContext.getText();
-		if (this.currentContext.getAttendedType().equals(ContextType.ANSWER)) {
-			int i = 0;
-			message += "\n";
-			for (String answer : this.currentContext.getAnswers()) {
-				message += i + " - " + this.translator.translate(answer) + "\n";
-				i++;
-			}
-			message = message.substring(0, message.length() - 1);
+	public Node getNode() {
+		return this.currentNode;
+	}
+	
+	public Node getNext(Answer a) {
+		Node next = this.currentNode.getNext(a);
+		if ( next != null ) {
+			this.currentNode = next;
 		}
-		return message;
+		return next;
 	}
 	
 	public void saveContextVariable() {
 		try {
-			this.variables = this.currentContext.save(new ArrayList<String>(this.variables.keySet()));
+			this.variables = this.interpreter.getVariables(new ArrayList<String>(this.variables.keySet()));
 		} catch (EvalError e) {
-			Log.get().warn("Impossible to save context variables for the context {}", this.currentContext);
+			Log.get().warn("Impossible to save context variables for the context {}", this.currentNode.getId());
 		}
 	}
 	
-	public boolean nextContext(Request r) {
-		String nextID = this.currentContext.getNextContextID(r);
-		if (nextID != null) {
-			this.saveContextVariable();
-			this.currentContext =  this.contextManager.loadContext(nextID);
+	protected void execute(String code) {
+		try {
+			this.interpreter.eval(code);
+		} catch (EvalError e) {
+			Log.get().error("Impossible to eval following code: '{}' for node {} !", e, code, this.currentNode.getId());
+			gameCorruptedException();
 		}
-		return nextID != null;
+	}
+	
+	protected Object getVariable(String name) {
+		try {
+	        return this.interpreter.getVariable(name);
+        } catch (EvalError e) {
+			Log.get().error("Impossible to get following variable: '{}' for node {} !", e, name, this.currentNode.getId());
+			gameCorruptedException();
+        }
+		return null;
 	}
 
 }

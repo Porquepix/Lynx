@@ -5,10 +5,10 @@ import java.util.List;
 import org.apache.logging.log4j.Level;
 
 import core.config.Config;
+import core.game.Answer;
 import core.game.Game;
 import core.game.GameManager;
-import core.game.Request;
-import core.game.validation.RequestValidator;
+import core.game.validation.GlobalValidator;
 import core.game.validation.GlobalValidatorBuilder;
 import core.json.JsonContent;
 import core.logging.Log;
@@ -49,17 +49,17 @@ public class Core {
 		return this.gameManager.getGames();
 	}
 	
-	private boolean isValidGameNumber(Request r) {
-		RequestValidator v = new GlobalValidatorBuilder()
+	private boolean isValidGameNumber(Answer a) {
+		GlobalValidator v = new GlobalValidatorBuilder()
 			.type(Integer.class)
 			.range(0, this.getGames().size())
 			.build();
-		return v.validate(r);
+		return v.validate(a.getValue());
 	}
 	
-	public Game selectGame(Request r) {
+	public Game selectGame(Answer r) {
 		if (isValidGameNumber(r)) {
-			return this.gameManager.setCurrent((int) r.getInput());
+			return this.gameManager.setCurrent((int) r.getValue());
 		}
 		return null;
 	}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.exception.LynxException;
-import core.game.Request;
+import core.game.Answer;
 import core.logging.Log;
 
 public class GlobalValidator implements Validator {
@@ -24,7 +24,7 @@ public class GlobalValidator implements Validator {
 		return valid;
 	}
 
-	public boolean validateOrFail(Request r) {
+	public boolean validateOrFail(Answer r) {
 		boolean ret = this.validate(r);
 		if (!ret) {
 			Log.get().error("Validation failed for request {} and validator {}", r, this);

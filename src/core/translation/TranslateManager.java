@@ -1,19 +1,18 @@
 package core.translation;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
+import core.ContentKey;
 import core.cache.Cache;
 import core.cache.LruCache;
 
 public class TranslateManager {
 	
 	private static final String TRANSLATION_ID_START = "t$";
-	private static final String ID_DELIMITER = ".";
 	
 	private Path root;
 	private String lang;
-	private Cache<String, Translator> cache;
+	private Cache<ContentKey, Translator> cache;
 	
 	public TranslateManager(Path root, String lang) {
 		this.root = root;
@@ -40,24 +39,22 @@ public class TranslateManager {
 	private String translateWithTranslator(String s) {
 		String translationId = s.substring(TRANSLATION_ID_START.length());
 		
-		int lastDelimiter = translationId.lastIndexOf(ID_DELIMITER);
-		String fileId = translationId.substring(0, lastDelimiter);
-		Translator translator = this.getTranslator(fileId);
+		ContentKey ck = new ContentKey(translationId);
+		Translator translator = this.getTranslator(ck);
 		
-		return translator.translate(translationId.substring(lastDelimiter + 1));
+		return translator.translate(ck.getContentId());
 	}
 
-	private Translator getTranslator(String fileId) {
-		if (!this.cache.containsKey(fileId)) {
-			this.loadTranslator(fileId);
+	private Translator getTranslator(ContentKey ck) {
+		if (!this.cache.containsKey(ck)) {
+			this.loadTranslator(ck);
 		}
-		return this.cache.get(fileId);
+		return this.cache.get(ck);
 	}
 
-	private void loadTranslator(String fileId) {
-		String filePath = fileId.replace(ID_DELIMITER, "/");
-		Translator translator = new Translator(this.root, this.lang, Paths.get(filePath));
-		this.cache.add(fileId, translator);
+	private void loadTranslator(ContentKey ck) {
+		Translator translator = new Translator(this.root, this.lang, ck.getFileIdAsPath());
+		this.cache.add(ck, translator);
 	}
 
 }
