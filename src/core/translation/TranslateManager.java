@@ -12,7 +12,7 @@ public class TranslateManager {
 	
 	private Path root;
 	private String lang;
-	private Cache<ContentKey, Translator> cache;
+	private Cache<String, Translator> cache;
 	
 	public TranslateManager(Path root, String lang) {
 		this.root = root;
@@ -46,15 +46,15 @@ public class TranslateManager {
 	}
 
 	private Translator getTranslator(ContentKey ck) {
-		if (!this.cache.containsKey(ck)) {
+		if (!this.cache.containsKey(ck.getFileId())) {
 			this.loadTranslator(ck);
 		}
-		return this.cache.get(ck);
+		return this.cache.get(ck.getFileId());
 	}
 
 	private void loadTranslator(ContentKey ck) {
 		Translator translator = new Translator(this.root, this.lang, ck.getFileIdAsPath());
-		this.cache.add(ck, translator);
+		this.cache.add(ck.getFileId(), translator);
 	}
 
 }

@@ -1,5 +1,6 @@
 {
     "0": {
+        "author": "t$authors.intro",
         "text": "t$consil0.0",
         "answer": {
             "type": "void"
@@ -11,6 +12,7 @@
         ]
     },
     "1": {
+        "author": "t$authors.alvin",
         "text": "t$consil0.1",
         "answer": {
             "type": "answer"
@@ -31,6 +33,7 @@
         ]
     },
     "2": {
+        "author": "t$authors.ulrich",
         "text": "t$consil0.2",
         "answer": {
             "type": "void"
@@ -42,6 +45,7 @@
         ]
     },
     "3": {
+        "author": "t$authors.alvin",
         "text": "t$consil0.3",
         "answer": {
             "type": "void"
@@ -53,6 +57,7 @@
         ]
     },
     "4": {
+        "author": "t$authors.ulrich",
         "text": "t$consil0.4",
         "answer": {
             "type": "void"
@@ -64,6 +69,7 @@
         ]
     },
     "5": {
+        "author": "t$authors.alvin",
         "text": "t$consil0.5",
         "answer": {
             "type": "void"

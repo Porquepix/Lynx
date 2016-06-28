@@ -1,7 +1,6 @@
 package console;
 
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -9,17 +8,22 @@ import org.fusesource.jansi.AnsiConsole;
 import core.Core;
 import core.game.Answer;
 import core.game.Game;
+import core.game.Node;
+import core.game.NodeType;
 import core.json.JsonContent;
 import core.json.JsonFile;
 
 public class ConsoleKernel {
 	
 	private static final JsonFile CONSOLE = new JsonFile("vendor/config/console.conf");
-	private static final Pattern COMMAND_PATTERN = Pattern.compile("^!([a-z]+)(\\s(.*))?");
 
 	private Scanner scanner;
 	private JsonContent config;
 	private Core gameCore;
+	private Game selectedGame;
+	
+	private boolean exit = false;
+	private boolean clear = false;
 	
 	public ConsoleKernel() {
 		this.scanner = new Scanner(System.in);
@@ -28,21 +32,28 @@ public class ConsoleKernel {
 	}
 	
 	public void start() {
-		printStartMessage();
+		displayHeader();
 		
 		this.gameCore = new Core();
 		
-		while (true) {
+		while (!exit) {
 			selectGame();
 			play();
 		}
 	}
 
-	public void stop() {
+	public void exit() {
+		this.exit = true;
 		AnsiConsole.systemUninstall();
 	}
+	
+	public void clear() {
+		this.clear = true;
+		Ansi a = Ansi.ansi().eraseScreen();
+		AnsiConsole.out.print(a);
+	}
 
-	private void printStartMessage() {
+	private void displayHeader() {
 		Ansi a = Ansi.ansi();
 		
 		a.bg(Ansi.Color.CYAN).fgDefault();
@@ -51,79 +62,137 @@ public class ConsoleKernel {
 		a.boldOff().fgDefault().a("|\n|");
 		a.fgBlack().a("   developed by Porquepix [github.com/Porquepix]   ");
 		a.fgDefault().a("|\n");
-		a.a("+---------------------------------------------------+\n");
+		a.a("+---------------------------------------------------+\n\n");
 		a.reset();
+		a.a("Tips: type '!list' to get the list of all available commands.\n");
 		
 		AnsiConsole.out.println(a);
     }
 	
 	private void selectGame() {
-	    AnsiConsole.out.println("Select a game:");
-	    
-	    Game selectedGame = null;
 		String input;
-		while (selectedGame == null) {
+		while (!exit && this.selectedGame == null) {
+			AnsiConsole.out.println("Select a game:");
+			
 			int i = 0;
 			for (Game g : this.gameCore.getGames()) {
-				Ansi a = Ansi.ansi();
+				displayHighlight(Integer.toString(i));
 				
-				a.fg(Ansi.Color.YELLOW).bold().bg(Ansi.Color.CYAN).a(i);
+				Ansi a = Ansi.ansi();				
 				a.reset().a(" - " + g.getName() + "\t\t");
 				AnsiConsole.out.print(a);
 				
 				i++;
 			}
 			AnsiConsole.out.print("\n");
-			input = this.getAnwser();
+			input = this.getAnswer();
 			
-			Answer userAnswer = new Answer(input);
-			selectedGame = this.gameCore.selectGame(userAnswer.toInteger());
-			
-			if (selectedGame == null) {
-				Ansi a = Ansi.ansi();
-				a.fg(Ansi.Color.RED);
-				a.a("Invalid input ! ");
-				a.reset();
-				AnsiConsole.out.println(a);
+			if (input != null) {
+				Answer userAnswer = new Answer(input);
+				this.selectedGame = this.gameCore.selectGame(userAnswer.toInteger());
+				
+				if (this.selectedGame != null) {
+					this.selectedGame.start();
+				} else {
+					displayError("Invalid input ! \n");
+				}
 			}
 		}	    
     }
 	
 	private void play() {
-	    // TODO Auto-generated method stub
-	    
+		while (!exit) {
+			if (this.selectedGame.getNode().hasAuthor()) {
+				displayUnderline(this.selectedGame.getNode().getAuthor() + ":");
+			}
+			display(" " + this.selectedGame.getNode().getText() + "\n");
+
+			if (!this.selectedGame.getNode().getType().equals(NodeType.VOID)) {
+				String input = this.getAnswer();
+				
+				if (input != null) {
+					Answer userAnswer = new Answer(input);
+					Node next = this.selectedGame.getNext(userAnswer);
+					
+					if (next == null) {
+						displayError("Invalid input ! \n");
+					}
+				}
+			} else {
+				this.selectedGame.getNext(new Answer("null"));
+			}
+		}
     }
 	
-	public String getAnwser() {
-		displayPrompt();
-		String ret = this.scanner.nextLine();
-		while (this.isCommand(ret)) {
-			String[] args = ret.split("\\s+");
-			String cmdName = args[0].substring(1);
-			Command c = Command.getCommands().get(cmdName);
-			if (c != null)
-				c.execute(args);
-			else {
-				Ansi a = Ansi.ansi();
-				a.fg(Ansi.Color.RED);
-				a.a("Command not found ! ");
-				a.reset();
-				AnsiConsole.out.println(a);
-			}
-			
+	public String getAnswer() {
+		String ret = null;
+		while (ret == null) {
 			displayPrompt();
 			ret = this.scanner.nextLine();
+			
+			if (Command.isCommand(ret)) {
+				executeCommand(ret);
+				ret = null;
+				
+				if (clear || exit) {
+					break;
+				}
+			} 
 		}
 		return ret;
 	}
 
+	private void executeCommand(String ret) {
+		Command c = Command.findByName(ret);
+		if (c != null) {
+			String[] args = ret.split("\\s+");
+			c.execute(this, args);
+		} else {
+			displayError("Command not found ! \n");
+		}	    
+    }
+
 	private void displayPrompt() {
+		if (this.selectedGame != null) {
+			AnsiConsole.out.print("(" + this.selectedGame.getName() + ") ");
+		}
 		AnsiConsole.out.print(this.config.getAsString("prompt", "$>") + " ");
 		AnsiConsole.out.flush();
     }
-
-	private boolean isCommand(String s) {
-	    return COMMAND_PATTERN.matcher(s).find();
-    }
 	
+	public void display(String message) {
+		Ansi a = Ansi.ansi();
+		a.reset();
+		a.a(message);
+		a.reset();
+		AnsiConsole.out.print(a);	
+	}
+	
+	public void displayUnderline(String message) {
+		Ansi a = Ansi.ansi();
+		a.a(Ansi.Attribute.UNDERLINE);
+		a.a(message);
+		a.a(Ansi.Attribute.UNDERLINE_OFF);
+		a.reset();
+		AnsiConsole.out.print(a);	
+	}
+	
+	public void displayHighlight(String message) {
+		Ansi a = Ansi.ansi();
+		a.fg(Ansi.Color.YELLOW);
+		a.bold();
+		a.bg(Ansi.Color.CYAN);
+		a.a(message);
+		a.reset();
+		AnsiConsole.out.print(a);		
+	}
+	
+	public void displayError(String error) {
+		Ansi a = Ansi.ansi();
+		a.fg(Ansi.Color.RED);
+		a.a(error);
+		a.reset();
+		AnsiConsole.out.print(a);
+	}
+
 }

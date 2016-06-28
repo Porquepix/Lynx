@@ -14,6 +14,8 @@ import core.translation.TranslateManager;
 
 public class Node {
 
+	private static final String URI_FORMAT = "story/%s.json"; 
+	
 	private Game game;
 	private JsonContent node;
 	private String id;
@@ -43,23 +45,24 @@ public class Node {
 	}
 
 	public String getAuthor() {
-		String author = this.node.getAsString("text", null);
+		String author = this.node.getAsString("author", null);
 		return author == null ? author : this.translator.translate(author);
 	}
 
 	public NodeType getType() {
-		String type = this.node.getAsObject("anwser", new JsonContent())
+		String type = this.node.getAsObject("answer", new JsonContent())
 		        .getAsString("type", "void");
 		Objects.requireNonNull(type);
 		return NodeType.getByName(type);
 	}
 
 	protected Node getNext(Answer a) {
-		if ( this.getAnswerValidator().validate(a) ) {
+		if ( this.getType().equals(NodeType.VOID) || this.getAnswerValidator().validate(a) ) {
 			this.game.execute("__answer=" + a.getValue());
 			List<Map<String, Object>> candidateNodes = (List<Map<String, Object>>) this.node.getAsArray("next", new ArrayList<Map<String, Object>>());
 			for (Map<String, Object> node : candidateNodes) {
-				if ( evalCondition((String) node.get("condition")) ) {
+				String condition = (String) node.get("condition");
+				if ( condition == null || evalCondition(condition) ) {
 					return Node.getFromId((String) node.get("context"), game);
 				}
 			}
@@ -81,8 +84,9 @@ public class Node {
 	}
 
 	public static Node getFromId(String nodeId, Game game) {
-		ContentKey ck = new ContentKey("story." + nodeId);
-		JsonFile jsonFile = new JsonFile(game.getRoot().resolve(ck.getFileIdAsPath()));
+		ContentKey ck = new ContentKey(nodeId);
+		String finalPath = String.format(URI_FORMAT, ck.getFileIdAsPath().toString());
+		JsonFile jsonFile = new JsonFile(game.getRoot().resolve(finalPath));
 		jsonFile.loadContentOrFail();
 		JsonContent nodeContent = jsonFile.getContent().getAsObject(ck.getContentId(), new JsonContent());
 		return new Node(nodeId, game, nodeContent);
