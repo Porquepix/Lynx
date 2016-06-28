@@ -1,6 +1,7 @@
 package core.translation;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import core.ContentKey;
 import core.cache.Cache;
@@ -56,5 +57,18 @@ public class TranslateManager {
 		Translator translator = new Translator(this.root, this.lang, ck.getFileIdAsPath());
 		this.cache.add(ck.getFileId(), translator);
 	}
+
+	public static String getValidLanguage(List<String> availiableLangs, String... attemptLangs) {
+	    int i = 0;
+	    boolean found = false;
+	    while (i < attemptLangs.length && !found) {
+	    	if (availiableLangs.contains(attemptLangs[i])) {
+	    		found = true;
+	    	} else {
+	    		i++;
+	    	}
+	    }
+	    return found ? attemptLangs[i] : null;
+    }
 
 }
