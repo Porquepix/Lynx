@@ -56,8 +56,11 @@ public class JsonContent {
 	}
 	
 	public JsonContent getAsObject(String key, JsonContent defaultValue) {	
-		
-		return new JsonContent(this.content.getAsObject(key, defaultValue.getJsonMap()));
+		if (defaultValue == null) {
+			return new JsonContent(this.content.getAsObject(key, null));	
+		} else {
+			return new JsonContent(this.content.getAsObject(key, defaultValue.getJsonMap()));			
+		}
 	}
 	
 	public JsonContent safeGetAsObject(String key, JsonContent defaultValue) {

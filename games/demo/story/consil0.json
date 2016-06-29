@@ -17,7 +17,7 @@
         "answer": {
             "type": "answer"
         },
-        "answers": [
+        "choices": [
             "t$consil0.1_a1",
             "t$consil0.1_a2"
         ],
@@ -82,6 +82,7 @@
     },
     "6": {
         "text": "t$consil0.6",
+        "author": "t$authors.ulrich",
         "answer": {
             "type": "void"
         },
@@ -94,7 +95,12 @@
     "7": {
         "text": "t$consil0.7",
         "answer": {
-            "type": "void"
-        }
+            "type": "string"
+        },
+        "next": [
+            {
+                "context": "consil0.7"
+            }
+        ]
     }
 }

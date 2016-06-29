@@ -11,6 +11,7 @@ import java.util.List;
 
 import core.Core;
 import core.exception.LynxException;
+import core.game.facade.GameFacade;
 import core.logging.Log;
 import core.translation.TranslateManager;
 
@@ -20,7 +21,7 @@ import core.translation.TranslateManager;
  * @author Alexis
  *
  */
-public class GameManager {
+public class GameLoader {
 	
 	private static final Path GAME_DIRECTORY = Paths.get("games");
 	private static final String GAME_INFO_FILE = "base.json";
@@ -28,14 +29,18 @@ public class GameManager {
 	private List<Game> games;
 	private Core core;
 	
-	public GameManager(Core core) {
+	public GameLoader(Core core) {
 		this.games = new ArrayList<>();
 		this.core = core;
 		this.loadGames();
 	}
 	
-	public List<Game> getGames() {
-		return Collections.unmodifiableList(this.games);
+	public List<GameFacade> getGames() {
+		List<GameFacade> ret = new ArrayList<>();
+		for (Game g : this.games) {
+			ret.add(new GameFacade(g));
+		}
+		return ret;
 	}
 	
 	public Game getGame(int gameNumber) {
@@ -50,7 +55,7 @@ public class GameManager {
 			if (this.containsInfoFile(gameDirectory)) {
 				Game game = loadGame(gameDirectory);
 				this.games.add(game);
-				Log.get().info("Game '{}' has successfully loaded.", game.getName());
+				Log.get().info("Game '{}' has successfully loaded.", game.getInfo().getName());
 			}
 		}
 		Collections.sort(this.games);

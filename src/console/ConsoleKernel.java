@@ -7,9 +7,8 @@ import org.fusesource.jansi.AnsiConsole;
 
 import core.Core;
 import core.game.Answer;
-import core.game.Game;
-import core.game.Node;
-import core.game.NodeType;
+import core.game.facade.GameFacade;
+import core.game.facade.StateNodeFacade;
 import core.json.JsonContent;
 import core.json.JsonFile;
 
@@ -20,7 +19,7 @@ public class ConsoleKernel {
 	private Scanner scanner;
 	private JsonContent config;
 	private Core gameCore;
-	private Game selectedGame;
+	private GameFacade selectedGame;
 	
 	private boolean exit = false;
 	private boolean clear = false;
@@ -75,7 +74,7 @@ public class ConsoleKernel {
 			AnsiConsole.out.println("Select a game:");
 			
 			int i = 0;
-			for (Game g : this.gameCore.getGames()) {
+			for (GameFacade g : this.gameCore.getGames()) {
 				displayHighlight(Integer.toString(i));
 				
 				Ansi a = Ansi.ansi();				
@@ -102,28 +101,45 @@ public class ConsoleKernel {
 	
 	private void play() {
 		while (!exit) {
-			if (this.selectedGame.getNode().hasAuthor()) {
-				displayUnderline(this.selectedGame.getNode().getAuthor() + ":");
+			if (this.selectedGame.getCurrentNode().hasAuthor()) {
+				displayUnderline(this.selectedGame.getCurrentNode().getAuthor() + ":");
 			}
-			display(" " + this.selectedGame.getNode().getText() + "\n");
+			display(" " + this.selectedGame.getCurrentNode().getText() + "\n");
 
-			if (!this.selectedGame.getNode().getType().equals(NodeType.VOID)) {
+			if (!this.selectedGame.getCurrentNode().isVoidType()) {
+				if (this.selectedGame.getCurrentNode().isAnswerType()) {
+					displayChoices();
+				}
 				String input = this.getAnswer();
 				
 				if (input != null) {
 					Answer userAnswer = new Answer(input);
-					Node next = this.selectedGame.getNext(userAnswer);
+					StateNodeFacade next = this.selectedGame.next(userAnswer);
 					
 					if (next == null) {
 						displayError("Invalid input ! \n");
 					}
 				}
 			} else {
-				this.selectedGame.getNext(new Answer("null"));
+				this.selectedGame.next(new Answer("null"));
 			}
 		}
     }
 	
+	private void displayChoices() {
+	   int i = 0;
+	   for (String choice : this.selectedGame.getCurrentNode().getChoices()) {
+			displayHighlight(Integer.toString(i));
+			
+			Ansi a = Ansi.ansi();				
+			a.reset().a(" - " + choice + "\t\t");
+			AnsiConsole.out.print(a);
+			
+			i++;
+	   }
+	   AnsiConsole.out.print("\n");
+    }
+
 	public String getAnswer() {
 		String ret = null;
 		while (ret == null) {

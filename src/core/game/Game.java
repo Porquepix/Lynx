@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import bsh.EvalError;
 import core.exception.LynxException;
 import core.game.interpreter.InterpreterFrame;
+import core.game.tree.StateNode;
 import core.logging.Log;
 import core.translation.TranslateManager;
 
@@ -18,7 +20,7 @@ public class Game implements Comparable<Game> {
 	private GameInfo info;
 	private Map<String, Object> variables;
 	private TranslateManager translator;
-	private Node currentNode;
+	private StateNode currentNode;
 	private InterpreterFrame interpreter;
 	
 	public Game(Path gameDir, GameInfo info) {
@@ -28,18 +30,19 @@ public class Game implements Comparable<Game> {
 		this.interpreter = null;
 	}
 	
-	protected static void gameCorruptedException() {
-		throw new LynxException("Internal error : game corrupted.");
+	public static void gameCorruptedException() {
+		throw new LynxException("Internal error : game corrupted. (Check logs to get more information)");
 	}
 	
 	public void start() {
 		this.variables = buildVariablesMap(info.getVariables());
-		this.currentNode = Node.getFromId(info.getStartingPoint(), this);
+		this.currentNode = new StateNode(this, info.getStartingPoint());
+		this.interpreter = new InterpreterFrame();
 		try {
-			this.interpreter = new InterpreterFrame(this.variables);
+			this.interpreter.addVariables(this.variables);
 		} catch (EvalError e) {
-			Log.get().error("Impossible to start interpreter !", e);
-			gameCorruptedException();
+			Log.get().error("Impossible to add the game variables to the interpreter !", e);
+			Game.gameCorruptedException();
 		}
 	}
 
@@ -60,8 +63,8 @@ public class Game implements Comparable<Game> {
 		return root.toString();
 	}
 
-	public String getName() {
-		return this.info.getName();
+	public GameInfo getInfo() {
+		return this.info;
 	}
 
 	public Path getRoot() {
@@ -80,16 +83,13 @@ public class Game implements Comparable<Game> {
 		return this.translator;
 	}
 	
-	public Node getNode() {
+	public StateNode getCurrentNode() {
 		return this.currentNode;
 	}
 	
-	public Node getNext(Answer a) {
-		Node next = this.currentNode.getNext(a);
-		if ( next != null ) {
-			this.currentNode = next;
-		}
-		return next;
+	public void setCurrentNode(StateNode node) {
+		Objects.requireNonNull(node);
+		this.currentNode = node;
 	}
 	
 	public void saveContextVariable() {
@@ -100,13 +100,18 @@ public class Game implements Comparable<Game> {
 		}
 	}
 	
-	protected void execute(String code) {
+	protected void eval(String code) {
 		try {
 			this.interpreter.eval(code);
 		} catch (EvalError e) {
 			Log.get().error("Impossible to eval following code: '{}' for node {} !", e, code, this.currentNode.getId());
 			gameCorruptedException();
 		}
+	}
+	
+	public boolean evalCondition(String condition) {
+		this.eval("__condition=(" + condition + ")");
+		return (boolean) this.getVariable("__condition");
 	}
 	
 	protected Object getVariable(String name) {
@@ -118,5 +123,29 @@ public class Game implements Comparable<Game> {
         }
 		return null;
 	}
+
+	public boolean next(Answer a) {
+		if (this.getCurrentNode().getAnswerNode().isVoidType()) {
+			this.advance();
+			return true;
+		}
+		
+		if (this.getCurrentNode().getAnswerNode().isValidAnswer(a)) {
+			try {
+	            this.interpreter.addVariable("__answer", this.getCurrentNode().getAnswerNode().getCastedAnswer(a).getValue());
+            } catch (EvalError e) {
+            	Log.get().error("Impossible to add answer variable for node: {}", this.getCurrentNode().getId());
+	            Game.gameCorruptedException();
+            }
+			this.advance();
+			return true;
+		}
+		
+	    return false;
+    }
+
+	private void advance() {
+	   this.setCurrentNode(this.getCurrentNode().getNextNode().getNextStateNode());
+    }
 
 }

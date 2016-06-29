@@ -1,6 +1,7 @@
 package core.translation;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import core.ContentKey;
@@ -36,6 +37,14 @@ public class TranslateManager {
 			return s;					
 		}
 	}
+	
+	public List<String> translateAll(List<String> sl) {
+	    List<String> ret = new ArrayList<>(sl.size());
+	    for (String s : sl) {
+	    	ret.add(this.translate(s));
+	    }
+	    return ret;
+    }
 
 	private String translateWithTranslator(String s) {
 		String translationId = s.substring(TRANSLATION_ID_START.length());

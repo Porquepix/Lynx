@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Level;
 
 import core.config.Config;
 import core.game.Answer;
-import core.game.Game;
-import core.game.GameManager;
+import core.game.GameLoader;
+import core.game.facade.GameFacade;
 import core.game.validation.GlobalValidator;
 import core.game.validation.GlobalValidatorBuilder;
 import core.json.JsonContent;
@@ -21,7 +21,7 @@ public class Core {
 
 	private JsonContent coreSettings;
 	private JsonContent userSettings;
-	private GameManager gameManager;
+	private GameLoader gameManager;
 	
 	public Core() {
 		this.coreSettings = Config.APP.loadContent().getContent();
@@ -32,7 +32,7 @@ public class Core {
 		}
 		this.userSettings = Config.USER.loadContent().getContent();
 		
-		this.gameManager = new GameManager(this);
+		this.gameManager = new GameLoader(this);
 		
 		Log.get().info("Core has successfully started...");
 	}
@@ -45,7 +45,7 @@ public class Core {
 		return this.userSettings.getAsString("lang", "en");
 	}
 	
-	public List<Game> getGames() {
+	public List<GameFacade> getGames() {
 		return this.gameManager.getGames();
 	}
 	
@@ -57,9 +57,9 @@ public class Core {
 		return v.validate(a.getValue());
 	}
 	
-	public Game selectGame(Answer r) {
+	public GameFacade selectGame(Answer r) {
 		if (isValidGameNumber(r)) {
-			return this.gameManager.setCurrent((int) r.getValue());
+			return new GameFacade(this.gameManager.getGame((int) r.getValue()));
 		}
 		return null;
 	}

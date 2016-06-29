@@ -46,4 +46,13 @@ public class Answer {
 		return this;
 	}
 
+	public Answer cast(Class<?> clazz) {
+	    if (clazz.equals(Integer.class)) {
+	    	return this.toInteger();
+	    } else if (clazz.equals(Double.class)) {
+	    	return this.toDouble();
+	    }
+	    return this;
+    }
+
 }
