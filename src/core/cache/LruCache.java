@@ -26,26 +26,35 @@ public class LruCache<T, K> extends Cache<T, K> {
 		super.remove(key);
 		this.keyUsage.remove(key);
 	}
-
+	
+	@Override
+	public void clear() {
+		super.clear();
+		this.keyUsage.clear();
+	}
+	
+	@Override
+	public K get(T key) {
+		if (this.containsKey(key)) {
+			refreshKeyUsage(key);
+			return super.get(key);			
+		}
+		return null;
+	}
+	
+	private void refreshKeyUsage(T key) {
+		int elementIndex = this.keyUsage.indexOf(key);
+		this.keyUsage.remove(elementIndex);
+		this.keyUsage.add(0, key);
+	}
+	
 	private void removeLeastRecentlyUsedKey() {
 		T leastUsedKey = this.getLeastRecentlyUsedKey();
 		this.remove(leastUsedKey);
 	}
 
-	private T getLeastRecentlyUsedKey() {
+	public T getLeastRecentlyUsedKey() {
 		return this.keyUsage.get(this.size() - 1);
-	}
-	
-	@Override
-	public K get(T key) {
-		refreshKeyUsage(key);
-		return super.get(key);
-	}
-
-	private void refreshKeyUsage(T key) {
-		int elementIndex = this.keyUsage.indexOf(key);
-		this.keyUsage.remove(elementIndex);
-		this.keyUsage.add(0, key);
 	}
 
 }

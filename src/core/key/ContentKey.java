@@ -1,37 +1,25 @@
-package core;
+package core.key;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ContentKey {
 
 	private static final String ID_DELIMITER = ".";
 
-	private String fileId;
+	private FileKey fileKey;
 	private String contentId;
 
 	public ContentKey(String contentKey) {
 		int lastIdDelimiter = contentKey.lastIndexOf(ID_DELIMITER);
-		this.fileId = contentKey.substring(0, lastIdDelimiter);
+		this.fileKey = new FileKey(contentKey.substring(0, lastIdDelimiter));
 		this.contentId = contentKey.substring(lastIdDelimiter + 1);
 	}
 
-	public String getFileId() {
-		return this.fileId;
-	}
-
-	public Path getFileIdAsPath() {
-		return Paths.get(this.fileId.replace(ID_DELIMITER, File.separator));
+	public FileKey getFileKey() {
+		return this.fileKey;
 	}
 
 	public String getContentId() {
 		return this.contentId;
-	}
-
-	@Override
-	public int hashCode() {
-		return this.fileId.hashCode();
 	}
 
 	@Override
@@ -40,7 +28,7 @@ public class ContentKey {
 
 		if ( o instanceof ContentKey ) {
 			ContentKey other = (ContentKey) o;
-			return this.getFileId().equals(other.getFileId())
+			return this.getFileKey().equals(other.getFileKey())
 			        && this.getContentId().equals(other.getContentId());
 		}
 

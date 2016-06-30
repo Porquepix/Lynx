@@ -4,17 +4,20 @@ import java.util.List;
 
 import org.apache.logging.log4j.Level;
 
-import core.config.Config;
 import core.game.Answer;
 import core.game.GameLoader;
 import core.game.facade.GameFacade;
 import core.game.validation.GlobalValidator;
 import core.game.validation.GlobalValidatorBuilder;
 import core.json.JsonContent;
+import core.json.JsonFile;
 import core.logging.Log;
 
 
 public class Core {
+	
+	public static final JsonFile CONFIG = new JsonFile("vendor/config/app.conf").loadContentOrFail();
+	public static final JsonFile USER = new JsonFile("vendor/config/user.conf").loadContent();
 	
 	public static final String MISSING_DATA = "Missing data !";
 	public static boolean DEBUG = false;
@@ -24,13 +27,13 @@ public class Core {
 	private GameLoader gameManager;
 	
 	public Core() {
-		this.coreSettings = Config.APP.loadContent().getContent();
+		this.coreSettings = CONFIG.getContent();
 		loadCoreSettings();
 		if (DEBUG) {
 			Log.get().setLevel(Level.DEBUG);
 			Log.get().warn("Application running in debug mode.");
 		}
-		this.userSettings = Config.USER.loadContent().getContent();
+		this.userSettings = USER.getContent();
 		
 		this.gameManager = new GameLoader(this);
 		

@@ -30,6 +30,10 @@ public abstract class Cache<T, K> {
 		this.cache.remove(key);
 	}
 	
+	public void clear() {
+		this.cache.clear();
+	}
+	
 	public K get(T key) {
 		return this.cache.get(key);
 	}

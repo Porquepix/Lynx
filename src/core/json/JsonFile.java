@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import core.exception.LynxException;
+import core.key.FileKey;
 import core.logging.Log;
 
 public class JsonFile {
@@ -17,6 +18,10 @@ public class JsonFile {
 	
 	public JsonFile(String path) {
 		this(Paths.get(path));
+	}
+	
+	public JsonFile(FileKey key) {
+		this(key.getPath());
 	}
 	
 	public JsonFile(Path path) {

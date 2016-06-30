@@ -9,7 +9,7 @@ import core.json.JsonFile;
 
 public class Translator {
 	
-	private static final String URI_FORMAT = "lang/%s/%s.json"; 
+	private static final String URI_FORMAT = "lang/%s/%s"; 
 
 	private String lang;
 	private JsonFile translationsFile;

@@ -3,14 +3,14 @@ package core.game.tree;
 import java.util.List;
 import java.util.Map;
 
-import core.ContentKey;
 import core.game.Game;
 import core.json.JsonContent;
 import core.json.JsonFile;
+import core.key.ContentKey;
 
 public class StateNode extends Node<JsonContent> {
 	
-	private static final String URI_FORMAT = "story/%s.json"; 
+	private static final String URI_FORMAT = "story/%s"; 
 	
 	public static final String TEXT = "text";
 	public static final String AUTHOR = "author";
@@ -55,7 +55,7 @@ public class StateNode extends Node<JsonContent> {
 
 	private void loadContentFromFile(String stateId) {
 		ContentKey ck = new ContentKey(stateId);
-		String finalPath = String.format(URI_FORMAT, ck.getFileIdAsPath().toString());
+		String finalPath = String.format(URI_FORMAT, ck.getFileKey().getPath().toString());
 		JsonFile jsonFile = new JsonFile(game.getRoot().resolve(finalPath));
 		jsonFile.loadContentOrFail();
 		this.content = jsonFile.getContent().getAsObject(ck.getContentId(), new JsonContent());

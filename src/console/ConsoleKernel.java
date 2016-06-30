@@ -164,7 +164,7 @@ public class ConsoleKernel {
 			String[] args = ret.split("\\s+");
 			c.execute(this, args);
 		} else {
-			displayError("Command not found ! \n");
+			displayError("Command not found ! (Type '!list' to get the list of all available commands) \n");
 		}	    
     }
 

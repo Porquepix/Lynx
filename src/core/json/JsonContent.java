@@ -107,6 +107,7 @@ public class JsonContent {
 			JsonContent jc = (JsonContent) o;
 			return this.content.equals(jc.content);
 		}
+		
 		return false;
 	}
 

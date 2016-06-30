@@ -4,9 +4,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.ContentKey;
 import core.cache.Cache;
 import core.cache.LruCache;
+import core.key.ContentKey;
+import core.key.FileKey;
 
 public class TranslateManager {
 	
@@ -14,7 +15,7 @@ public class TranslateManager {
 	
 	private Path root;
 	private String lang;
-	private Cache<String, Translator> cache;
+	private Cache<FileKey, Translator> cache;
 	
 	public TranslateManager(Path root, String lang) {
 		this.root = root;
@@ -56,15 +57,15 @@ public class TranslateManager {
 	}
 
 	private Translator getTranslator(ContentKey ck) {
-		if (!this.cache.containsKey(ck.getFileId())) {
+		if (!this.cache.containsKey(ck.getFileKey())) {
 			this.loadTranslator(ck);
 		}
-		return this.cache.get(ck.getFileId());
+		return this.cache.get(ck.getFileKey());
 	}
 
 	private void loadTranslator(ContentKey ck) {
-		Translator translator = new Translator(this.root, this.lang, ck.getFileIdAsPath());
-		this.cache.add(ck.getFileId(), translator);
+		Translator translator = new Translator(this.root, this.lang, ck.getFileKey().getPath());
+		this.cache.add(ck.getFileKey(), translator);
 	}
 
 	public static String getValidLanguage(List<String> availiableLangs, String... attemptLangs) {
