@@ -1,33 +1,24 @@
 package core.translation;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import core.Core;
-import core.json.JsonContent;
-import core.json.JsonFile;
+import core.json.controller.TranslationController;
+import core.json.model.TranslationModel;
+import core.key.FileKey;
 
 public class Translator {
-	
-	private static final String URI_FORMAT = "lang/%s/%s"; 
 
 	private String lang;
-	private JsonFile translationsFile;
-	private JsonContent translations;
+	private FileKey translationsFile;
+	private TranslationModel translations;
 	
-	public Translator(String root, String lang, String file) {
-		this(Paths.get(root), lang, Paths.get(file));
-	}
-	
-	public Translator(Path root, String lang, Path file) {
+	public Translator(FileKey root, String lang, FileKey file) {
 		this.lang = lang;
-		this.translationsFile = new JsonFile(this.getFullPath(root, file));
-		this.translations = this.translationsFile.loadContent().getContent();
-	}
-
-	private Path getFullPath(Path root, Path file) {
-		Path finalPath = root.resolve(String.format(URI_FORMAT, this.lang, file.toString()));
-		return finalPath;
+		
+		FileKey baseFk = new FileKey("lang." + this.lang);
+		this.translationsFile = root.merge(baseFk).merge(file);
+		
+		TranslationController transController = new TranslationController(this.translationsFile);
+		this.translations = transController.fetch();
 	}
 	
 	public String getLang() {
@@ -35,7 +26,8 @@ public class Translator {
 	}
 
 	public String translate(String translationKey) {
-		return this.translations.getAsString(translationKey, Core.MISSING_DATA);
+		String translation = this.translations.getTranslation(translationKey);
+		return translation != null ? translation : Core.MISSING_DATA;
 	}
 
 }

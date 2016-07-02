@@ -1,6 +1,5 @@
 package core.translation;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +12,11 @@ public class TranslateManager {
 	
 	private static final String TRANSLATION_ID_START = "t$";
 	
-	private Path root;
+	private FileKey root;
 	private String lang;
 	private Cache<FileKey, Translator> cache;
 	
-	public TranslateManager(Path root, String lang) {
+	public TranslateManager(FileKey root, String lang) {
 		this.root = root;
 		this.lang = lang;
 		this.cache = new LruCache<>(10);
@@ -27,7 +26,7 @@ public class TranslateManager {
 		return this.lang;
 	}
 	
-	public Path getRoot() {
+	public FileKey getRoot() {
 		return this.root;
 	}
 	
@@ -64,7 +63,7 @@ public class TranslateManager {
 	}
 
 	private void loadTranslator(ContentKey ck) {
-		Translator translator = new Translator(this.root, this.lang, ck.getFileKey().getPath());
+		Translator translator = new Translator(this.root, this.lang, ck.getFileKey());
 		this.cache.add(ck.getFileKey(), translator);
 	}
 

@@ -44,8 +44,8 @@ public abstract class JsonController<T> {
         }
 	}
 	
-	public abstract T fetch();
-	
-	public abstract void store(T model);
+    public abstract T fetch();
+
+    public abstract void store(T model);
 	
 }

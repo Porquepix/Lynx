@@ -4,23 +4,27 @@ import java.io.IOException;
 import java.io.Writer;
 
 import core.json.JsonController;
-import core.json.model.AppSettingsModel;
 import core.key.FileKey;
 import core.logging.Log;
 
-public class AppSettingsController extends JsonController<AppSettingsModel> {
+public class BaseController<T> extends JsonController<T> {
 
-	public AppSettingsController(FileKey file) {
+	private Class<T> type;
+	
+	public BaseController(FileKey file, Class<T> type) {
 	    super(file);
+	    this.type = type;
+    }
+	
+	public Class<T> getType() {
+		return this.type;
+	}
+	
+    public T fetch() {
+	    return this.gson.fromJson(this.getReader(), this.getType());
     }
 
-	@Override
-    public AppSettingsModel fetch() {
-	    return this.gson.fromJson(this.getReader(), AppSettingsModel.class);
-    }
-
-	@Override
-    public void store(AppSettingsModel model) {
+    public void store(T model) {
 	    String json = this.gson.toJson(model);
 	    Writer writer = this.getWriter();
 	    try {
@@ -30,5 +34,5 @@ public class AppSettingsController extends JsonController<AppSettingsModel> {
         	Log.get().warn("Impossible to get the write in the file '{}'", e, this.getFile().getKey());
         }
     }
-	
+
 }

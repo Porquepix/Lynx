@@ -9,43 +9,52 @@ import core.game.GameLoader;
 import core.game.facade.GameFacade;
 import core.game.validation.GlobalValidator;
 import core.game.validation.GlobalValidatorBuilder;
-import core.json.JsonContent;
-import core.json.JsonFile;
+import core.json.controller.AppSettingsController;
+import core.json.model.AppSettingsModel;
+import core.key.FileKey;
 import core.logging.Log;
 
 
 public class Core {
 	
-	public static final JsonFile CONFIG = new JsonFile("vendor/config/app.conf").loadContentOrFail();
-	public static final JsonFile USER = new JsonFile("vendor/config/user.conf").loadContent();
+	private static final FileKey APP_CONF_FILE = new FileKey("vendor.config.app");
+	private static final FileKey USER_CONF_FILE = new FileKey("vendor.config.user");
 	
 	public static final String MISSING_DATA = "Missing data !";
 	public static boolean DEBUG = false;
 
-	private JsonContent coreSettings;
-	private JsonContent userSettings;
+	private AppSettingsModel appSettings;
 	private GameLoader gameManager;
 	
 	public Core() {
-		this.coreSettings = CONFIG.getContent();
 		loadCoreSettings();
 		if (DEBUG) {
 			Log.get().setLevel(Level.DEBUG);
 			Log.get().warn("Application running in debug mode.");
+			Log.get().logComputerData();
 		}
-		this.userSettings = USER.getContent();
+		loadUserSettings();
 		
 		this.gameManager = new GameLoader(this);
 		
 		Log.get().info("Core has successfully started...");
 	}
 
+	private void loadUserSettings() {
+		Log.get().info("User settings have been successfully set...");
+    }
+
 	private void loadCoreSettings() {
-		DEBUG = coreSettings.getAsBoolean("debug", DEBUG);
+		AppSettingsController appController = new AppSettingsController(APP_CONF_FILE);
+		this.appSettings = appController.fetch();
+		
+		DEBUG = this.appSettings.getDebug();
+		
+		Log.get().info("Core settings have been successfully set...");
 	}
 	
 	public String getUserLang() {
-		return this.userSettings.getAsString("lang", "en");
+		return null; //this.userSettings.getAsString("lang", "en");
 	}
 	
 	public List<GameFacade> getGames() {
