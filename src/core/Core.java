@@ -9,7 +9,7 @@ import core.game.GameLoader;
 import core.game.facade.GameFacade;
 import core.game.validation.GlobalValidator;
 import core.game.validation.GlobalValidatorBuilder;
-import core.json.controller.AppSettingsController;
+import core.json.controller.BaseController;
 import core.json.model.AppSettingsModel;
 import core.key.FileKey;
 import core.logging.Log;
@@ -27,11 +27,12 @@ public class Core {
 	private GameLoader gameManager;
 	
 	public Core() {
+		Log.get().warn(">>> -------------------- >>> STARTING CORE <<< -------------------- <<<");
 		loadCoreSettings();
 		if (DEBUG) {
 			Log.get().setLevel(Level.DEBUG);
 			Log.get().warn("Application running in debug mode.");
-			Log.get().logComputerData();
+			Log.get().logUserConfiguration();
 		}
 		loadUserSettings();
 		
@@ -45,7 +46,7 @@ public class Core {
     }
 
 	private void loadCoreSettings() {
-		AppSettingsController appController = new AppSettingsController(APP_CONF_FILE);
+		BaseController<AppSettingsModel> appController = new BaseController<>(APP_CONF_FILE, AppSettingsModel.class);
 		this.appSettings = appController.fetch();
 		
 		DEBUG = this.appSettings.getDebug();

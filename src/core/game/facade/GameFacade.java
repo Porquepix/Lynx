@@ -2,14 +2,17 @@ package core.game.facade;
 
 import core.game.Answer;
 import core.game.Game;
+import core.translation.TranslateManager;
 
 public class GameFacade {
 	
 	private Game game;
 	private StateNodeFacade node;
+	private TranslateManager translator;
 	
 	public GameFacade(Game game) {
 		this.game = game;
+		this.translator = game.getTranslator();
 	}
 	
 	public void start() {
@@ -18,7 +21,7 @@ public class GameFacade {
 	}
 	
 	public String getName() {
-		return this.game.getInfo().getName();
+		return translator.translate(this.game.getInfo().getName());
 	}
 	
 	public StateNodeFacade getCurrentNode() {

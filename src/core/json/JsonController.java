@@ -13,14 +13,14 @@ import core.key.FileKey;
 import core.logging.Log;
 
 public abstract class JsonController<T> {
-
+	
 	private FileKey file;
 	protected Gson gson;
-	
+		
 	public JsonController(FileKey file) {
 		this.file = file;
 		this.gson = new Gson();
-	}
+    }
 	
 	public FileKey getFile() {
 		return this.file;
@@ -47,5 +47,5 @@ public abstract class JsonController<T> {
     public abstract T fetch();
 
     public abstract void store(T model);
-	
+
 }

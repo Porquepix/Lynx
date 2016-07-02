@@ -1,64 +1,45 @@
 package core.game.tree;
 
-import java.util.List;
-import java.util.Map;
-
 import core.game.Game;
-import core.json.JsonContent;
-import core.json.JsonFile;
+import core.json.controller.NodeController;
+import core.json.model.node.NodeModel;
 import core.key.ContentKey;
+import core.key.FileKey;
 
-public class StateNode extends Node<JsonContent> {
+public class StateNode extends Node<NodeModel> {
 	
-	private static final String URI_FORMAT = "story/%s"; 
+	private static final FileKey ROOT = new FileKey("story"); 
 	
-	public static final String TEXT = "text";
-	public static final String AUTHOR = "author";
-	protected static final String CHOICES = "choices";
-	protected static final String ANSWER = "answer";
-	protected static final String NEXT = "next";
-	protected static final String CONDITION = "condition";
-
 	private Game game;
 	private String stateId;
 	
 	private AnswerNode answerData;
-	private ChoicesNode<?> choicesNode;
+	private ChoicesNode choicesNode;
 	private NextNode nextData;
 
 	public StateNode(Game game, String stateId) {
-		 super(null, new JsonContent());
+		 super(null, new NodeModel());
 		 this.game = game;
 		 this.stateId = stateId;
-		 loadContentFromFile(stateId);
+		 
+		 loadModel(stateId);
 		 loadChildrenNode();
     }
-
-	@SuppressWarnings("unchecked")
-    private void loadChildrenNode() {
-		this.answerData = new AnswerNode(this, content.getAsObject(ANSWER, null));
-	    this.nextData = new NextNode(this, (List<Map<String, String>>) content.getAsArray(NEXT, null));
-	    loadChoiceNode();
-    }
-
-	@SuppressWarnings("unchecked")
-    private void loadChoiceNode() {
-	    if (this.answerData.isAnswerType()) {
-	    	List<?> choicesContent = content.getAsArray(CHOICES, null);
-	    	if (choicesContent != null && !choicesContent.isEmpty() && choicesContent.get(0) instanceof String) {
-	    		this.choicesNode = new ChoicesStringNode(this, (List<String>) choicesContent);
-	    	} else {
-	    		this.choicesNode = new ChoicesObjectNode(this, (List<Map<String, String>>) choicesContent);	    		
-	    	}
-	    }
-	}
-
-	private void loadContentFromFile(String stateId) {
+	
+	private void loadModel(String stateId) {
 		ContentKey ck = new ContentKey(stateId);
-		String finalPath = String.format(URI_FORMAT, ck.getFileKey().getPath().toString());
-		JsonFile jsonFile = new JsonFile(game.getRoot().resolve(finalPath));
-		jsonFile.loadContentOrFail();
-		this.content = jsonFile.getContent().getAsObject(ck.getContentId(), new JsonContent());
+		FileKey finalPath = game.getRoot().merge(ROOT).merge(ck.getFileKey());
+		
+		NodeController nodeController = new NodeController(finalPath);
+		this.setContent(nodeController.fetch().get(ck.getContentId()));
+    }
+	
+    private void loadChildrenNode() {
+		this.answerData = new AnswerNode(this, content.getAnswer());
+	    this.nextData = new NextNode(this, content.getNexts());
+	    if (content.hasChoices()) {
+	    	this.choicesNode = new ChoicesNode(this, content.getChoices());	    	
+	    }
     }
 	
 	public Game getGame() {
@@ -69,6 +50,14 @@ public class StateNode extends Node<JsonContent> {
 		return this.stateId;
 	}
 	
+	public String getText() {
+		return content.getText();
+	}
+	
+	public String getAuthor() {
+		return content.getAuthor();
+	}
+	
 	public AnswerNode getAnswerNode() {
 		return this.answerData;
 	}
@@ -77,16 +66,12 @@ public class StateNode extends Node<JsonContent> {
 		return this.nextData;
 	}
 	
-	public ChoicesNode<?> getChoicesNode() {
+	public ChoicesNode getChoicesNode() {
 		return this.choicesNode;
 	}
 	
-	public String getText() {
-		return this.getContent().getAsString(TEXT, null);
-	}
-	
-	public String getAuthor() {
-		return this.getContent().getAsString(AUTHOR, null);
-	}
+	public double nbChoices() {
+	    return content.getChoices().size();
+    }
 	
 }

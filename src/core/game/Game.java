@@ -1,6 +1,5 @@
 package core.game;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,32 +10,43 @@ import bsh.EvalError;
 import core.exception.LynxException;
 import core.game.interpreter.InterpreterFrame;
 import core.game.tree.StateNode;
+import core.json.controller.BaseController;
+import core.json.model.GameInfoModel;
+import core.key.FileKey;
 import core.logging.Log;
 import core.translation.TranslateManager;
 
 public class Game implements Comparable<Game> {
+	
+	public static final String INFO_FILE = "base";
 
-	private Path root;
-	private GameInfo info;
+	private FileKey root;
+	private GameInfoModel info;
 	private Map<String, Object> variables;
 	private TranslateManager translator;
 	private StateNode currentNode;
 	private InterpreterFrame interpreter;
 	
-	public Game(Path gameDir, GameInfo info) {
+	public Game(FileKey gameDir) {
 		this.root = gameDir;
-		this.info = info;
 		this.variables = null;
 		this.interpreter = null;
+		loadInfo();
 	}
 	
+	private void loadInfo() {
+		FileKey file =  root.append(INFO_FILE);
+		BaseController<GameInfoModel> gInfoController = new BaseController<>(file, GameInfoModel.class);
+		this.info = gInfoController.fetch();
+	}
+
 	public static void gameCorruptedException() {
 		throw new LynxException("Internal error : game corrupted. (Check logs to get more information)");
 	}
 	
 	public void start() {
-		this.variables = buildVariablesMap(info.getVariables());
-		this.currentNode = new StateNode(this, info.getStartingPoint());
+		this.variables = buildVariablesMap(info.getDeclaration());
+		this.currentNode = new StateNode(this, info.getBoot());
 		this.interpreter = new InterpreterFrame();
 		try {
 			this.interpreter.addVariables(this.variables);
@@ -63,11 +73,11 @@ public class Game implements Comparable<Game> {
 		return root.toString();
 	}
 
-	public GameInfo getInfo() {
+	public GameInfoModel getInfo() {
 		return this.info;
 	}
 
-	public Path getRoot() {
+	public FileKey getRoot() {
 		return this.root;
 	}
 
@@ -100,7 +110,7 @@ public class Game implements Comparable<Game> {
 		}
 	}
 	
-	protected void eval(String code) {
+	public void eval(String code) {
 		try {
 			this.interpreter.eval(code);
 		} catch (EvalError e) {

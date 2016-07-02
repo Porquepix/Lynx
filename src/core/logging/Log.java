@@ -11,6 +11,8 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 
+import core.Version;
+
 public class Log {
 
 	private static Log instance = null;
@@ -105,8 +107,11 @@ public class Log {
 		}
 	}
 	
-	public void logComputerData() {
-		// Os
+	public void logUserConfiguration() {
+		// Lynx
+		info("Lynx version: {}", Version.CURRENT);
+		
+		// OS
 		info("Operating system (name): {}", System.getProperty("os.name"));
 		info("Operating system (version): {}", System.getProperty("os.version"));
 		info("Operating system (arch): {}", System.getProperty("os.arch"));

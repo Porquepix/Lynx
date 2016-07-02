@@ -1,13 +1,13 @@
 package core.game.tree;
 
 import java.util.List;
-import java.util.Map;
 
 import core.game.Game;
+import core.json.model.node.NextModel;
 
-public class NextNode extends Node<List<Map<String, String>>> {
+public class NextNode extends Node<List<NextModel>> {
 
-	public NextNode(StateNode parent, List<Map<String, String>> content) {
+	public NextNode(StateNode parent, List<NextModel> content) {
 	    super(parent, content);
     }
 
@@ -20,9 +20,10 @@ public class NextNode extends Node<List<Map<String, String>>> {
 		int i = 0;
 		boolean found = false;
 		
+		NextModel model = null;
 		while (i < this.getContent().size() && !found) {
-			String condition = this.getContent().get(i).get("condition");
-			if ( condition == null || this.evalCondition(condition) ) {
+			model = content.get(i);
+			if ( evalCondition(model) ) {
 				found = true;
 			} else {
 				i++;
@@ -31,15 +32,21 @@ public class NextNode extends Node<List<Map<String, String>>> {
 
 		if (found) {
 			Game game = this.getParent().getGame();
-			String stateId = this.getContent().get(i).get("context");
+			this.executeAfter(model);
+			String stateId = model.getNode();
 			return new StateNode(game, stateId);
 		} else {
 			return null;
 		}
     }
+	
+	private boolean evalCondition(NextModel model) {
+	    return !model.hasCondition() || this.getParent().getGame().evalCondition(model.getCondition());
+    }
 
-	private boolean evalCondition(String condition) {
-		return this.getParent().getGame().evalCondition(condition);
+	public void executeAfter(NextModel model) {
+		if (model.hasAfter()) {
+			this.getParent().getGame().eval(model.getAfter());
+		}
 	}
-
 }

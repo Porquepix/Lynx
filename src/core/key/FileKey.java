@@ -19,6 +19,11 @@ public class FileKey {
 		this.path =  Paths.get(this.key.replace(ID_DELIMITER, File.separator) + EXTENSION);
 	}
 	
+	public FileKey append(String other) {
+		Objects.requireNonNull(other);
+		return this.merge(new FileKey(other));
+	}
+	
 	public FileKey merge(FileKey other) {
 		Objects.requireNonNull(other);
 		return new FileKey(this.key + "." + other.key);

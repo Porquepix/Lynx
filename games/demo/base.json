@@ -1,9 +1,8 @@
 {
     "name": "t$base.name",
     "description": "t$base.description",
-    "langs": ["fr"],
-    "lang": "fr",
+    "languages": ["fr"],
+    "language": "fr",
     "declare": [],
-    "boot": "consil0.0",
-    "save": false
+    "boot": "consil0.0"
 }

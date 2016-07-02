@@ -10,12 +10,11 @@ import core.logging.Log;
 public class BaseController<T> extends JsonController<T> {
 
 	private Class<T> type;
-	
+		
 	public BaseController(FileKey file, Class<T> type) {
-	    super(file);
+		super(file);
 	    this.type = type;
     }
-	
 	public Class<T> getType() {
 		return this.type;
 	}

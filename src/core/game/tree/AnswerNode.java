@@ -3,18 +3,16 @@ package core.game.tree;
 import core.game.Answer;
 import core.game.validation.GlobalValidatorBuilder;
 import core.game.validation.Validator;
-import core.json.JsonContent;
+import core.json.model.node.AnswerModel;
 
-public class AnswerNode extends Node<JsonContent> {
-	
-	protected static final String TYPE = "type";
-	
+public class AnswerNode extends Node<AnswerModel> {
+		
 	private Validator answerValidator;
 	private NodeType type;
 
-	public AnswerNode(StateNode parent, JsonContent content) {
+	public AnswerNode(StateNode parent, AnswerModel content) {
 	    super(parent, content);
-	    this.type = NodeType.getByName(content.getAsString(TYPE, null));
+	    this.type = NodeType.getByName(content.getType());
 	    buildAnswerValidator();
     }
 	
@@ -27,6 +25,14 @@ public class AnswerNode extends Node<JsonContent> {
 	    GlobalValidatorBuilder builder = new GlobalValidatorBuilder();
 	    
 	    builder.type(this.getAnswerType().getClazz());
+	    
+	    if (content.hasRange()) {
+	    	builder.range(content.getRange().getMin(), content.getRange().getMax());
+	    }
+	    
+	    if (this.isAnswerType()) {
+	    	builder.range(0, this.getParent().nbChoices());
+	    }
 	    
 	    this.answerValidator = builder.build();
     }

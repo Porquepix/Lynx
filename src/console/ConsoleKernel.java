@@ -9,15 +9,15 @@ import core.Core;
 import core.game.Answer;
 import core.game.facade.GameFacade;
 import core.game.facade.StateNodeFacade;
-import core.json.JsonContent;
-import core.json.JsonFile;
+import core.json.controller.BaseController;
+import core.key.FileKey;
 
 public class ConsoleKernel {
 	
-	private static final JsonFile CONSOLE = new JsonFile("vendor/config/console.conf");
+	private static final FileKey CONSOLE = new FileKey("vendor.config.console");
 
 	private Scanner scanner;
-	private JsonContent config;
+	private ConsoleModel config;
 	private Core gameCore;
 	private GameFacade selectedGame;
 	
@@ -26,7 +26,10 @@ public class ConsoleKernel {
 	
 	public ConsoleKernel() {
 		this.scanner = new Scanner(System.in);
-		this.config = CONSOLE.loadContentOrFail().getContent();
+		
+		BaseController<ConsoleModel> consoleController = new BaseController<>(CONSOLE, ConsoleModel.class);
+		this.config = consoleController.fetch();
+		
 		AnsiConsole.systemInstall();
 	}
 	
@@ -172,7 +175,8 @@ public class ConsoleKernel {
 		if (this.selectedGame != null) {
 			AnsiConsole.out.print("(" + this.selectedGame.getName() + ") ");
 		}
-		AnsiConsole.out.print(this.config.getAsString("prompt", "$>") + " ");
+		AnsiConsole.out.print(config.getPrompt());
+		AnsiConsole.out.print(" ");
 		AnsiConsole.out.flush();
     }
 	
