@@ -1,0 +1,5 @@
+{
+    "debug": true,
+    "translator_cache_size": 5,
+    "node_cache_size": 10
+}

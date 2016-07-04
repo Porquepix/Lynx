@@ -7,23 +7,25 @@ import com.google.gson.reflect.TypeToken;
 
 import core.json.JsonController;
 import core.json.model.node.NodeModel;
-import core.key.FileKey;
+import core.namespace.Namespace;
 
 public class NodeController extends JsonController<Map<String, NodeModel>> {
 
-	public NodeController(FileKey file) {
-	    super(file);
+    public NodeController(Namespace namespace) {
+	super(namespace);
     }
 
-	@Override
+    @Override
     public Map<String, NodeModel> fetch() {
-		Type type = new TypeToken<Map<String, NodeModel>>(){}.getType();
-	    return this.gson.fromJson(this.getReader(), type);
+	Type type = new TypeToken<Map<String, NodeModel>>() {
+	}.getType();
+	return this.gson.fromJson(this.getReader(), type);
     }
 
-	@Override
+    @Override
     public void store(Map<String, NodeModel> model) {
-		throw new UnsupportedOperationException("Impossible to write on game file.");
-	}
+	throw new UnsupportedOperationException(
+		"Impossible to write on game file.");
+    }
 
 }

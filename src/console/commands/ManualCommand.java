@@ -1,40 +1,43 @@
 package console.commands;
 
+import static console.ConsoleHelper.*;
+
 import console.Command;
 import console.ConsoleKernel;
 
 public class ManualCommand extends Command {
 
-	@Override
+    @Override
     public String getName() {
-	    return "man";
+	return "man";
     }
 
-	@Override
+    @Override
     public String getDescription() {
-	    return "Provide help about a command.";
+	return "Provide help about a command.";
     }
 
-	@Override
+    @Override
     public String getManual() {
-	    return "Usage : !man <command_name>";
+	return "Usage : !man <command_name>";
     }
 
-	@Override
+    @Override
     public void execute(ConsoleKernel kernel, String... args) {
-		if (args.length <= 1) {
-			kernel.displayError(this.getManual() + "\n");
-			return;
-		}
-		
-		Command cmd = Command.getCommands().get(args[1]);
-		
-		if (cmd == null) {
-			kernel.displayError("'" + args[1] + "': command not found ! \n");
-		} else {
-			kernel.displayHighlight("!" + args[1]);
-			kernel.display("\n" + cmd.getDescription() + "\n\n" + cmd.getManual() + "\n");	
-		}    
+	if (args.length <= 1) {
+	    displayError(this.getManual() + "\n");
+	    return;
+	}
+
+	Command cmd = Command.getCommands().get(args[1]);
+
+	if (cmd == null) {
+	    displayError("'" + args[1] + "': command not found ! \n");
+	} else {
+	    displayHighlight("!" + args[1]);
+	    display("\n" + cmd.getDescription() + "\n\n"
+		    + cmd.getManual() + "\n");
+	}
     }
 
 }

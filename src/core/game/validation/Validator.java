@@ -1,8 +1,12 @@
 package core.game.validation;
 
+import core.logging.Loggers;
+import core.logging.LynxLogger;
 
 public interface Validator {
-	
-	public boolean validate(Object data);
+    
+    static final LynxLogger logger = Loggers.getLogger(Validator.class);
+
+    public boolean validate(Object data);
 
 }

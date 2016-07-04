@@ -1,5 +1,7 @@
 package console.commands;
 
+import static console.ConsoleHelper.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,30 +10,30 @@ import console.Command;
 import console.ConsoleKernel;
 
 public class ListCommand extends Command {
-	
-	@Override
+
+    @Override
     public String getName() {
-	    return "list";
+	return "list";
     }
 
-	@Override
+    @Override
     public String getDescription() {
-	    return "List all available commands.";
+	return "List all available commands.";
     }
 
-	@Override
+    @Override
     public String getManual() {
-	    return "-";
+	return "-";
     }
 
-	@Override
+    @Override
     public void execute(ConsoleKernel kernel, String... args) {
-		List<Command> commands = new ArrayList<>(Command.getCommands().values());
-		Collections.sort(commands);
-	    for (Command c : commands) {
-	    	kernel.displayHighlight("!" + c.getName());
-	    	kernel.display(" - " + c.getDescription() + "\n");
-	    }
+	List<Command> commands = new ArrayList<>(Command.getCommands().values());
+	Collections.sort(commands);
+	for (Command c : commands) {
+	    displayHighlight("!" + c.getName());
+	    display(" - " + c.getDescription() + "\n");
+	}
     }
 
 }

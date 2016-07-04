@@ -4,25 +4,27 @@ import java.util.Map;
 
 import core.json.JsonController;
 import core.json.model.TranslationModel;
-import core.key.FileKey;
+import core.namespace.Namespace;
 
 public class TranslationController extends JsonController<TranslationModel> {
 
-	public TranslationController(FileKey file) {
-	    super(file);
+    public TranslationController(Namespace namespace) {
+	super(namespace);
     }
 
-	@Override
+    @Override
     public TranslationModel fetch() {
-		@SuppressWarnings("unchecked")
-        Map<String, String> translations = this.gson.fromJson(this.getReader(), Map.class);
-		
-	    return new TranslationModel(translations);
+	@SuppressWarnings("unchecked")
+	Map<String, String> translations = this.gson.fromJson(this.getReader(),
+		Map.class);
+
+	return new TranslationModel(translations);
     }
 
-	@Override
+    @Override
     public void store(TranslationModel model) {
-	    throw new UnsupportedOperationException("Impossible to write on translation file.");
+	throw new UnsupportedOperationException(
+		"Impossible to write on translation file.");
     }
 
 }

@@ -1,34 +1,32 @@
 package core.game.tree;
 
 import core.game.Game;
-import core.logging.Log;
+import core.logging.Loggers;
 
 public enum NodeType {
 
-	ANSWER(Integer.class), 
-	DOUBLE(Double.class),
-	INTEGER(Integer.class), 
-	STRING(String.class), 
-	VOID(Void.class);
 
-	private Class<?> clazz;
+    ANSWER(Integer.class), DOUBLE(Double.class), INTEGER(Integer.class), 
+    STRING(String.class), VOID(Void.class);
 
-	NodeType(Class<?> clazz) {
-		this.clazz = clazz;
+    private Class<?> clazz;
+
+    NodeType(Class<?> clazz) {
+	this.clazz = clazz;
+    }
+
+    public Class<?> getClazz() {
+	return this.clazz;
+    }
+
+    public static NodeType getByName(String name) {
+	try {
+	    return NodeType.valueOf(name.toUpperCase());
+	} catch (Exception e) {
+	    Loggers.getLogger(NodeType.class).error("NodeType not found for name: {}.", name);
+	    Game.gameCorruptedException();
 	}
-
-	public Class<?> getClazz() {
-		return this.clazz;
-	}
-
-	public static NodeType getByName(String name) {
-		try {
-			return NodeType.valueOf(name.toUpperCase());
-		} catch (Exception e) {
-			Log.get().error("NodeType not found for name: {}.", name);
-			Game.gameCorruptedException();
-		}
-		return null;
-	}
+	return null;
+    }
 
 }
