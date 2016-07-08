@@ -39,7 +39,7 @@ public class ConsoleKernel {
     public void start() {
 	displayHeader();
 
-	this.gameCore = new Core();
+	this.gameCore = Core.getInstance();
 
 	while (!exit) {
 	    selectGame();

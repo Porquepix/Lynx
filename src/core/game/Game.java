@@ -174,6 +174,7 @@ public class Game implements Comparable<Game> {
     private void advance() {
 	this.setCurrentNode(this.getCurrentNode().getNextNode()
 		.getNextStateNode());
+	this.getCurrentNode().init();
     }
 
 }

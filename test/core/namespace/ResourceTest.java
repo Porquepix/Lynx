@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class RessourceTest {
+public class ResourceTest {
 
-    private Ressource res1 = new Ressource("a.b.c.d.e");
-    private Ressource res2 = new Ressource("g.h");
+    private Resource res1 = new Resource("a.b.c.d.e");
+    private Resource res2 = new Resource("g.h");
 
     @Test
     public void testGetNamespace() {
@@ -23,7 +23,7 @@ public class RessourceTest {
 
     @Test
     public void testEquals() {
-	Ressource res3 = new Ressource("a.b.c.d.e");
+	Resource res3 = new Resource("a.b.c.d.e");
 	assertEquals(res1, res3);
     }
 

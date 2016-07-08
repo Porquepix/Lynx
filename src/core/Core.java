@@ -16,6 +16,8 @@ import core.logging.LynxLogger;
 import core.namespace.Namespace;
 
 public class Core {
+    
+    private static Core instance = null;
 
     private static final Namespace APP_CONF_FILE = new Namespace(
 	    "vendor.config.app");
@@ -30,7 +32,7 @@ public class Core {
     private AppSettingsModel appSettings;
     private GameLoader gameManager;
 
-    public Core() {
+    private Core() {
 	logger.warn(">>> -------------------- >>> STARTING CORE <<< -------------------- <<<");
 	loadCoreSettings();
 	if (DEBUG) {
@@ -78,6 +80,17 @@ public class Core {
 	    return new GameFacade(this.gameManager.getGame((int) r.getValue()));
 	}
 	return null;
+    }
+    
+    public AppSettingsModel getSettings() {
+	return this.appSettings;
+    }
+    
+    public static Core getInstance() {
+	if (instance == null) {
+	    instance = new Core();
+	}
+	return instance;
     }
 
 }

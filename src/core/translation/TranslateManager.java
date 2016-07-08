@@ -3,10 +3,11 @@ package core.translation;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.Core;
 import core.cache.Cache;
 import core.cache.LruCache;
 import core.namespace.Namespace;
-import core.namespace.Ressource;
+import core.namespace.Resource;
 
 public class TranslateManager {
 
@@ -19,7 +20,7 @@ public class TranslateManager {
     public TranslateManager(Namespace root, String lang) {
 	this.root = root;
 	this.lang = lang;
-	this.cache = new LruCache<>(10);
+	this.cache = new LruCache<>(Core.getInstance().getSettings().getTranslatorCahceSize());
     }
 
     public String getLang() {
@@ -48,24 +49,21 @@ public class TranslateManager {
 
     private String translateWithTranslator(String s) {
 	String translationId = s.substring(TRANSLATION_ID_START.length());
-
-	Ressource res = new Ressource(translationId);
-	Translator translator = this.getTranslator(res);
-
+	Resource res = new Resource(translationId);
+	Translator translator = this.getTranslator(res.getNamespace());
 	return translator.translate(res.getId());
     }
 
-    private Translator getTranslator(Ressource res) {
-	if (!this.cache.containsKey(res.getNamespace())) {
-	    this.loadTranslator(res);
+    public Translator getTranslator(Namespace name) {
+	if (!this.cache.containsKey(name)) {
+	    this.loadTranslator(name);
 	}
-	return this.cache.get(res.getNamespace());
+	return this.cache.get(name);
     }
 
-    private void loadTranslator(Ressource res) {
-	Translator translator = new Translator(this.root, this.lang,
-		res.getNamespace());
-	this.cache.add(res.getNamespace(), translator);
+    private void loadTranslator(Namespace name) {
+	Translator translator = new Translator(this.root, this.lang, name);
+	this.cache.add(name, translator);
     }
 
     public static String getValidLanguage(List<String> availiableLangs,

@@ -2,7 +2,7 @@ package core.namespace;
 
 import java.nio.file.Path;
 
-public class Ressource {
+public class Resource {
 
     public static final String RESSOURCE_SEPARATOR = ".";
     private static final String RESSOURCE_EXTENSION = "json";
@@ -10,7 +10,7 @@ public class Ressource {
     private Namespace namespace;
     private String id;
 
-    public Ressource(String key) {
+    public Resource(String key) {
 	int lastSeparator = key.lastIndexOf(RESSOURCE_SEPARATOR);
 	this.namespace = new Namespace(key.substring(0, lastSeparator));
 	this.id = key.substring(lastSeparator + 1);
@@ -38,8 +38,8 @@ public class Ressource {
 	    return true;
 	}
 
-	if (o instanceof Ressource) {
-	    Ressource other = (Ressource) o;
+	if (o instanceof Resource) {
+	    Resource other = (Resource) o;
 	    return namespace.equals(other.getNamespace())
 		    && id.equals(other.getId());
 	}

@@ -4,7 +4,7 @@ import core.game.Game;
 import core.json.controller.NodeController;
 import core.json.model.node.NodeModel;
 import core.namespace.Namespace;
-import core.namespace.Ressource;
+import core.namespace.Resource;
 
 public class StateNode extends Node<NodeModel> {
 
@@ -27,7 +27,7 @@ public class StateNode extends Node<NodeModel> {
     }
 
     private void loadModel(String stateId) {
-	Ressource res = new Ressource(stateId);
+	Resource res = new Resource(stateId);
 	res.setNamespace(game.getRoot().merge(ROOT).merge(res.getNamespace()));
 
 	NodeController nodeController = new NodeController(res.getNamespace());
@@ -39,6 +39,12 @@ public class StateNode extends Node<NodeModel> {
 	this.nextData = new NextNode(this, content.getNexts());
 	if (content.hasChoices()) {
 	    this.choicesNode = new ChoicesNode(this, content.getChoices());
+	}
+    }
+    
+    public void init() {
+	if (content.hasInit()) {
+	    game.eval(content.getInit());		    
 	}
     }
 
