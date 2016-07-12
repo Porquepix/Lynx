@@ -6,16 +6,16 @@ import core.game.Game;
 import core.game.tree.StateNode;
 import core.logging.Loggers;
 import core.logging.LynxLogger;
-import core.translation.TranslateManager;
+import core.translation.CacheFileTranslator;
 
 public class StateNodeFacade {
 
     private static final LynxLogger logger = Loggers.getLogger(StateNodeFacade.class);
 
     private StateNode node;
-    private TranslateManager translator;
+    private CacheFileTranslator translator;
 
-    public StateNodeFacade(StateNode node, TranslateManager translator) {
+    public StateNodeFacade(StateNode node, CacheFileTranslator translator) {
 	this.node = node;
 	this.translator = translator;
     }

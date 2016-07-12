@@ -15,7 +15,7 @@ import core.json.model.GameInfoModel;
 import core.logging.Loggers;
 import core.logging.LynxLogger;
 import core.namespace.Namespace;
-import core.translation.TranslateManager;
+import core.translation.CacheFileTranslator;
 
 public class Game implements Comparable<Game> {
 
@@ -27,7 +27,7 @@ public class Game implements Comparable<Game> {
     private Namespace root;
     private GameInfoModel info;
     private Map<String, Object> variables;
-    private TranslateManager translator;
+    private CacheFileTranslator translator;
     private StateNode currentNode;
     private InterpreterFrame interpreter;
 
@@ -89,7 +89,7 @@ public class Game implements Comparable<Game> {
 	return this.root;
     }
 
-    public void setTranslator(TranslateManager t) {
+    public void setTranslator(CacheFileTranslator t) {
 	this.translator = t;
     }
 
@@ -97,7 +97,7 @@ public class Game implements Comparable<Game> {
 	return this.variables;
     }
 
-    public TranslateManager getTranslator() {
+    public CacheFileTranslator getTranslator() {
 	return this.translator;
     }
 

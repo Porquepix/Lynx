@@ -1,6 +1,7 @@
 package core.translation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,10 @@ import org.junit.Test;
 import core.Core;
 import core.namespace.Namespace;
 
-public class TranslateManagerTest {
+public class CacheFileTranslatorTest {
     
-    private TranslateManager managerFr = new TranslateManager(new Namespace("vendor.test"), "fr");
-    private TranslateManager managerEn = new TranslateManager(new Namespace("vendor.test"), "en");
+    private CacheFileTranslator managerFr = new CacheFileTranslator(new Namespace("vendor.test"), "fr", 10);
+    private CacheFileTranslator managerEn = new CacheFileTranslator(new Namespace("vendor.test"), "en", 10);
     
     @Test
     public void testSingleton() {
@@ -29,8 +30,8 @@ public class TranslateManagerTest {
     
     @Test
     public void testGetRoot() {
-	assertEquals(managerFr.getRoot(), new Namespace("vendor.test"));
-	assertEquals(managerEn.getRoot(), new Namespace("vendor.test"));
+	assertEquals(managerFr.getRoot(), new Namespace("vendor.test.lang.fr"));
+	assertEquals(managerEn.getRoot(), new Namespace("vendor.test.lang.en"));
     }
     
     @Test
@@ -55,17 +56,6 @@ public class TranslateManagerTest {
 	test.add("t$translation.world");
 	
 	assertEquals(managerFr.translateAll(test), expected);
-    }
-    
-    @Test
-    public void testGetValidLanguage() {
-	List<String> availiableLangs = new ArrayList<>();
-	availiableLangs.add("fr");
-	availiableLangs.add("en");
-	
-	assertEquals(TranslateManager.getValidLanguage(availiableLangs, "fr", "en"), "fr");
-	assertEquals(TranslateManager.getValidLanguage(availiableLangs, "en", "es", "fr"), "en");
-	assertEquals(TranslateManager.getValidLanguage(availiableLangs, "es", "it", "de"), null);
     }
 
 }

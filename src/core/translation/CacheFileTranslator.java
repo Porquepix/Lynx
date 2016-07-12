@@ -3,24 +3,24 @@ package core.translation;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Core;
 import core.cache.Cache;
 import core.cache.LruCache;
 import core.namespace.Namespace;
 import core.namespace.Resource;
 
-public class TranslateManager {
+public class CacheFileTranslator implements Translator {
 
+	 private static final Namespace TRANSLATION_DIR = new Namespace("lang");
     private static final String TRANSLATION_ID_START = "t$";
 
     private Namespace root;
     private String lang;
     private Cache<Namespace, Translator> cache;
-
-    public TranslateManager(Namespace root, String lang) {
-	this.root = root;
+    
+    public CacheFileTranslator(Namespace root, String lang, int cachesize) {
+	this.root = root.merge(TRANSLATION_DIR).append(lang);
 	this.lang = lang;
-	this.cache = new LruCache<>(Core.getInstance().getSettings().getTranslatorCahceSize());
+	this.cache = new LruCache<>(cachesize);
     }
 
     public String getLang() {
@@ -62,22 +62,8 @@ public class TranslateManager {
     }
 
     private void loadTranslator(Namespace name) {
-	Translator translator = new Translator(this.root, this.lang, name);
+	Translator translator = new FileTranslator(this.root.merge(name));
 	this.cache.add(name, translator);
-    }
-
-    public static String getValidLanguage(List<String> availiableLangs,
-	    String... attemptLangs) {
-	int i = 0;
-	boolean found = false;
-	while (i < attemptLangs.length && !found) {
-	    if (availiableLangs.contains(attemptLangs[i])) {
-		found = true;
-	    } else {
-		i++;
-	    }
-	}
-	return found ? attemptLangs[i] : null;
     }
 
 }

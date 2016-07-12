@@ -13,7 +13,8 @@ import core.json.model.GameInfoModel;
 import core.logging.Loggers;
 import core.logging.LynxLogger;
 import core.namespace.Namespace;
-import core.translation.TranslateManager;
+import core.translation.CacheFileTranslator;
+import core.translation.Translator;
 
 /**
  * Load and store all available games.
@@ -73,17 +74,17 @@ public class GameLoader {
 	Game game = new Game(gameDirectory);
 
 	// assign translator based on the user language
-	TranslateManager gameTranslator = this.createGameTranlator(game);
+	CacheFileTranslator gameTranslator = this.createGameTranlator(game);
 	game.setTranslator(gameTranslator);
 
 	return game;
     }
 
-    private TranslateManager createGameTranlator(Game game) {
+    private CacheFileTranslator createGameTranlator(Game game) {
 	GameInfoModel gim = game.getInfo();
-	String userLang = TranslateManager.getValidLanguage(gim.getLanguages(),
+	String userLang = Translator.getValidLanguage(gim.getLanguages(),
 		this.core.getUserLang(), gim.getLanguage());
-	return new TranslateManager(game.getRoot(), userLang);
+	return new CacheFileTranslator(game.getRoot(), userLang, Core.getInstance().getSettings().getTranslatorCahceSize());
     }
 
     private String[] getGameDirectoriesName() {

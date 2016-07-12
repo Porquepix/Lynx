@@ -2,13 +2,13 @@ package core.game.facade;
 
 import core.game.Answer;
 import core.game.Game;
-import core.translation.TranslateManager;
+import core.translation.CacheFileTranslator;
 
 public class GameFacade {
 
     private Game game;
     private StateNodeFacade node;
-    private TranslateManager translator;
+    private CacheFileTranslator translator;
 
     public GameFacade(Game game) {
 	this.game = game;
