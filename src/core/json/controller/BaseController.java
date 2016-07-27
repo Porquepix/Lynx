@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 import core.json.JsonController;
+import core.json.JsonModel;
 import core.namespace.Namespace;
 
-public class BaseController<T> extends JsonController<T> {
+public class BaseController<T extends JsonModel> extends JsonController<T> {
 
     private Class<T> type;
 

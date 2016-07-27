@@ -1,10 +1,13 @@
 package core.json.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class TranslationModel {
+import core.json.JsonModel;
 
-    private Map<String, String> translations;
+public class TranslationModel extends JsonModel {
+
+    private Map<String, String> translations = new HashMap<>();
 
     public TranslationModel(Map<String, String> translations) {
 	this.translations = translations;

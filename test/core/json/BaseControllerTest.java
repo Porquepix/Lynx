@@ -47,7 +47,7 @@ public class BaseControllerTest {
 	
 	assertTrue(model.getDebug());
 	assertEquals(model.getNodeCacheSize(), 10);
-	assertEquals(model.getTranslatorCahceSize(), 5);
+	assertEquals(model.getTranslatorCacheSize(), 5);
     }
     
     @Test

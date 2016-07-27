@@ -1,6 +1,8 @@
 package console;
 
-public class ConsoleModel {
+import core.json.JsonModel;
+
+public class ConsoleModel extends JsonModel {
 
     private String prompt;
 

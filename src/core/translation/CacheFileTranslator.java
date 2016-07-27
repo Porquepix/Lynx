@@ -7,10 +7,10 @@ import core.cache.Cache;
 import core.cache.LruCache;
 import core.namespace.Namespace;
 import core.namespace.Resource;
+import core.util.Strings;
 
 public class CacheFileTranslator implements Translator {
 
-	 private static final Namespace TRANSLATION_DIR = new Namespace("lang");
     private static final String TRANSLATION_ID_START = "t$";
 
     private Namespace root;
@@ -18,7 +18,7 @@ public class CacheFileTranslator implements Translator {
     private Cache<Namespace, Translator> cache;
     
     public CacheFileTranslator(Namespace root, String lang, int cachesize) {
-	this.root = root.merge(TRANSLATION_DIR).append(lang);
+	this.root = root.append(lang);
 	this.lang = lang;
 	this.cache = new LruCache<>(cachesize);
     }
@@ -32,10 +32,11 @@ public class CacheFileTranslator implements Translator {
     }
 
     public String translate(String s) {
-	if (s.startsWith(TRANSLATION_ID_START)) {
-	    return translateWithTranslator(s);
+	String escaped = Strings.nullToEmpty(s); 
+	if (escaped.startsWith(TRANSLATION_ID_START)) {
+	    return translateWithTranslator(escaped);
 	} else {
-	    return s;
+	    return escaped;
 	}
     }
 
@@ -62,7 +63,7 @@ public class CacheFileTranslator implements Translator {
     }
 
     private void loadTranslator(Namespace name) {
-	Translator translator = new FileTranslator(this.root.merge(name));
+	Translator translator = new FileTranslator(root.merge(name));
 	this.cache.add(name, translator);
     }
 

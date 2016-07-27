@@ -2,32 +2,36 @@ package core.namespace;
 
 import java.util.Arrays;
 
-public class Namespace {
+public final class Namespace {
     
-    public static final String NAMESPACE_SEPARATOR = ".";
-    protected static final String NAMESPACE_SEPARATOR_REGEX = "\\.";
+    public static final String SEPARATOR = ".";
+    public static final String SEPARATOR_REGEX = "\\.";
     
     private String key;
-    private String[] paths;
+    private String[] segments;
     private NamespaceResolver resolver;
     
     public Namespace(String key) {
 	this.key = key;
-	this.paths = key.split(NAMESPACE_SEPARATOR_REGEX);
+	this.segments = key.split(SEPARATOR_REGEX);
 	this.resolver = new NamespaceResolver(this);
     }
     
+    public Namespace(Namespace other) {
+	this(other.getKey());
+    }
+
     public String getKey() {
 	return this.key;
     }
     
     public String getSubkey(int startSegment, int endSegment) {
-	String[] subpaths = Arrays.copyOfRange(paths, startSegment, endSegment);
-	return String.join(NAMESPACE_SEPARATOR, subpaths);
+	String[] subpaths = Arrays.copyOfRange(segments, startSegment, endSegment);
+	return String.join(SEPARATOR, subpaths);
     }
     
     public String getSegment(int segment) {
-	return paths[segment];
+	return segments[segment];
     }
     
     public String getFirstSegment() {
@@ -35,7 +39,7 @@ public class Namespace {
     }
     
     public String getLastSegment() {
-	return getSegment(paths.length - 1);
+	return getSegment(segments.length - 1);
     }
     
     public Namespace append(String otherKey) {
@@ -49,8 +53,14 @@ public class Namespace {
     }
     
     public Namespace merge(Namespace otherNamespace) {
-	String mergedKey = getKey() + NAMESPACE_SEPARATOR + otherNamespace.getKey();
+	String mergedKey = getKey() + SEPARATOR + otherNamespace.getKey();
 	return new Namespace(mergedKey);
+    }
+    
+    public Resource getResource(String relativeName) {
+	Resource relative = new Resource(relativeName);
+	relative.setNamespace(this.merge(relative.getNamespace()));
+	return relative;
     }
     
     public NamespaceResolver getResolver() {

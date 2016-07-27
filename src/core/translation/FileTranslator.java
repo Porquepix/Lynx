@@ -3,10 +3,10 @@ package core.translation;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Core;
 import core.json.controller.TranslationController;
 import core.json.model.TranslationModel;
 import core.namespace.Namespace;
+import core.util.Strings;
 
 public class FileTranslator implements Translator {
 
@@ -23,8 +23,9 @@ public class FileTranslator implements Translator {
     }
 
     public String translate(String translationKey) {
-	String translation = this.translations.getTranslation(translationKey);
-	return translation != null ? translation : Core.MISSING_DATA;
+	String escaped = Strings.nullToEmpty(translationKey);
+	String translation = this.translations.getTranslation(escaped);
+	return translation != null ? translation : escaped;
     }
     
     public List<String> translateAll(List<String> sl) {

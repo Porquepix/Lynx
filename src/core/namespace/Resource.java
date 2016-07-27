@@ -5,7 +5,6 @@ import java.nio.file.Path;
 public class Resource {
 
     public static final String RESSOURCE_SEPARATOR = ".";
-    private static final String RESSOURCE_EXTENSION = "json";
 
     private Namespace namespace;
     private String id;
@@ -14,6 +13,11 @@ public class Resource {
 	int lastSeparator = key.lastIndexOf(RESSOURCE_SEPARATOR);
 	this.namespace = new Namespace(key.substring(0, lastSeparator));
 	this.id = key.substring(lastSeparator + 1);
+    }
+    
+    public Resource(Resource other) {
+	this.namespace = new Namespace(other.getNamespace());
+	this.id = other.getId();
     }
 
     public String getId() {
@@ -29,7 +33,7 @@ public class Resource {
     }
 
     public Path getRessourceFile() {
-	return namespace.getResolver().getFilePath(RESSOURCE_EXTENSION);
+	return namespace.getResolver().getFilePath(Extension.JSON);
     }
 
     @Override

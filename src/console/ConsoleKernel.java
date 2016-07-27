@@ -2,6 +2,7 @@ package console;
 
 import static console.ConsoleHelper.*;
 
+import java.util.List;
 import java.util.Scanner;
 
 import org.fusesource.jansi.Ansi;
@@ -9,10 +10,12 @@ import org.fusesource.jansi.AnsiConsole;
 
 import core.Core;
 import core.game.Answer;
-import core.game.facade.GameFacade;
-import core.game.facade.StateNodeFacade;
+import core.game.GameFacade;
+import core.game.node.NodeFacade;
 import core.json.controller.BaseController;
 import core.namespace.Namespace;
+import core.validation.GlobalValidatorBuilder;
+import core.validation.Validator;
 
 public class ConsoleKernel {
 
@@ -76,12 +79,14 @@ public class ConsoleKernel {
     }
 
     private void selectGame() {
+	List<GameFacade> games = gameCore.getGames();
+	
 	String input;
 	while (!exit && selectedGame == null) {
 	    AnsiConsole.out.println("Select a game:");
 
 	    int i = 0;
-	    for (GameFacade g : gameCore.getGames()) {
+	    for (GameFacade g : games) {
 		displayHighlight(Integer.toString(i));
 
 		Ansi a = Ansi.ansi();
@@ -94,10 +99,11 @@ public class ConsoleKernel {
 	    input = getAnswer();
 
 	    if (input != null) {
-		Answer userAnswer = new Answer(input);
-		this.selectedGame = gameCore.selectGame(userAnswer.toInteger());
+		Answer userAnswer = new Answer(input).toInteger();
+		Validator validator = new GlobalValidatorBuilder().type(Integer.class).range(0, games.size()).build();
 
-		if (selectedGame != null) {
+		if (validator.validate(userAnswer.getValue())) {
+		    selectedGame = games.get((int) userAnswer.getValue());
 		    selectedGame.start();
 		} else {
 		    displayError("Invalid input ! \n");
@@ -114,15 +120,15 @@ public class ConsoleKernel {
 	    }
 	    display(" " + selectedGame.getCurrentNode().getText() + "\n");
 
-	    if (!selectedGame.getCurrentNode().isVoidType()) {
-		if (selectedGame.getCurrentNode().isAnswerType()) {
+	    if (!selectedGame.getCurrentNode().isSkippable()) {
+		if (selectedGame.getCurrentNode().isClosedAnswer()) {
 		    displayChoices();
 		}
 		String input = this.getAnswer();
 
 		if (input != null) {
 		    Answer userAnswer = new Answer(input);
-		    StateNodeFacade next = selectedGame.next(userAnswer);
+		    NodeFacade next = selectedGame.next(userAnswer);
 
 		    if (next == null) {
 			displayError("Invalid input ! \n");

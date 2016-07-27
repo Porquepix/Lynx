@@ -2,7 +2,9 @@ package core.json.model;
 
 import java.util.List;
 
-public class GameInfoModel {
+import core.json.JsonModel;
+
+public class GameInfoModel extends JsonModel {
 
     private String name;
     private String description;

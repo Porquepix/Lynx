@@ -38,6 +38,14 @@ public class NamespaceTest {
     }
 
     @Test
+    public void testGetResource() {
+	Resource r1 = ns1.getResource("c.d");
+	assertEquals(r1.getNamespace(), ns1.merge(new Namespace("c")));
+	assertEquals(r1.getId(), "d");
+    }
+    
+    
+    @Test
     public void testEquals() {
 	Namespace ns3 = new Namespace("a.b.c.d");
 	assertEquals(ns1, ns3);

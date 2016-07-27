@@ -1,20 +1,18 @@
 package core.translation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import core.Core;
 import core.namespace.Namespace;
 
 public class CacheFileTranslatorTest {
     
-    private CacheFileTranslator managerFr = new CacheFileTranslator(new Namespace("vendor.test"), "fr", 10);
-    private CacheFileTranslator managerEn = new CacheFileTranslator(new Namespace("vendor.test"), "en", 10);
+    private CacheFileTranslator managerFr = new CacheFileTranslator(new Namespace("vendor.test.lang"), "fr", 10);
+    private CacheFileTranslator managerEn = new CacheFileTranslator(new Namespace("vendor.test.lang"), "en", 10);
     
     @Test
     public void testSingleton() {
@@ -38,11 +36,13 @@ public class CacheFileTranslatorTest {
     public void testTranslate() {
 	assertEquals(managerFr.translate("t$translation.hello"), "Bonjour");
 	assertEquals(managerFr.translate("hello"), "hello");
-	assertEquals(managerFr.translate("t$translation.hello1"), Core.MISSING_DATA);
+	assertEquals(managerFr.translate("t$translation.hello1"), "hello1");
+	assertEquals(managerFr.translate(null), "");
 	
 	assertEquals(managerEn.translate("t$translation.hello"), "Hello");
 	assertEquals(managerEn.translate("hello"), "hello");
-	assertEquals(managerEn.translate("t$translation.hello1"), Core.MISSING_DATA);
+	assertEquals(managerEn.translate("t$translation.hello1"),  "hello1");
+	assertEquals(managerEn.translate(null), "");
     }
     
     @Test

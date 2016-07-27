@@ -15,14 +15,14 @@ public class NamespaceResolverTest {
 
     @Test
     public void testGetFilePath() {
-	assertEquals(nsr1.getFilePath("json"), Paths.get("a/b/c/d.json"));
-	assertEquals(nsr2.getFilePath("json"), Paths.get("e/f/g.json"));
+	assertEquals(nsr1.getFilePath(Extension.JSON), Paths.get("a/b/c/d.json"));
+	assertEquals(nsr2.getFilePath(Extension.JSON), Paths.get("e/f/g.json"));
     }
 
     @Test
     public void testGetFilePathAsString() {
-	assertEquals(nsr1.getFilePathAsString("json"), "a\\b\\c\\d.json");
-	assertEquals(nsr2.getFilePathAsString("json"), "e\\f\\g.json");
+	assertEquals(nsr1.getFilePathAsString(Extension.JSON), "a\\b\\c\\d.json");
+	assertEquals(nsr2.getFilePathAsString(Extension.JSON), "e\\f\\g.json");
     }
     
     @Test
@@ -41,8 +41,8 @@ public class NamespaceResolverTest {
     public void testMergedResolver() {
 	NamespaceResolver nsr3 = ns1.merge(ns2).getResolver();
 	
-	assertEquals(nsr3.getFilePath("json"), Paths.get("a/b/c/d/e/f/g.json"));
-	assertEquals(nsr3.getFilePathAsString("json"), "a\\b\\c\\d\\e\\f\\g.json");
+	assertEquals(nsr3.getFilePath(Extension.JSON), Paths.get("a/b/c/d/e/f/g.json"));
+	assertEquals(nsr3.getFilePathAsString(Extension.JSON), "a\\b\\c\\d\\e\\f\\g.json");
 	assertEquals(nsr3.getDirectoryPath(), Paths.get("a/b/c/d/e/f/g"));
 	assertEquals(nsr3.getDirectoryPathAsString(), "a\\b\\c\\d\\e\\f\\g");
     }

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import core.Core;
 import core.namespace.Namespace;
 
 public class FileTranslatorTest {
@@ -18,10 +17,12 @@ public class FileTranslatorTest {
     @Test
     public void testTranslate() {
 	assertEquals(t1.translate("hello"), "Bonjour");
-	assertEquals(t1.translate("hello1"), Core.MISSING_DATA);
+	assertEquals(t1.translate("hello1"), "hello1");
+	assertEquals(t1.translate(null), "");
 	
 	assertEquals(t2.translate("hello"), "Hello");
-	assertEquals(t2.translate("hello1"), Core.MISSING_DATA);
+	assertEquals(t2.translate("hello1"), "hello1");
+	assertEquals(t2.translate(null), "");
     }
     
     @Test

@@ -12,13 +12,12 @@ import com.google.gson.Gson;
 import core.exception.LynxException;
 import core.logging.Loggers;
 import core.logging.LynxLogger;
+import core.namespace.Extension;
 import core.namespace.Namespace;
 
-public abstract class JsonController<T> {
+public abstract class JsonController<T extends JsonModel> {
 
     protected static final LynxLogger logger = Loggers.getLogger(JsonController.class);
-    
-    private static final String JSON_EXTENSION = "json";
 
     private Namespace namespace;
     protected Gson gson;
@@ -34,7 +33,7 @@ public abstract class JsonController<T> {
 
     protected final Reader getReader() {
 	try {
-	    Path path = namespace.getResolver().getFilePath(JSON_EXTENSION);
+	    Path path = namespace.getResolver().getFilePath(Extension.JSON);
 	    return Files.newBufferedReader(path, StandardCharsets.UTF_8);
 	} catch (IOException e) {
 	    logger.error("Impossible to get the reader of the file '{}'", e,
@@ -47,7 +46,7 @@ public abstract class JsonController<T> {
 
     protected final Writer getWriter() {
 	try {
-	    Path path = namespace.getResolver().getFilePath(JSON_EXTENSION);
+	    Path path = namespace.getResolver().getFilePath(Extension.JSON);
 	    return Files.newBufferedWriter(path, StandardCharsets.UTF_8);
 	} catch (IOException e) {
 	    logger.error("Impossible to get the writer of the file '{}'", e,

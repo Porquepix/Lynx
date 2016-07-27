@@ -8,20 +8,14 @@ import java.util.Collections;
 import java.util.List;
 
 import core.Core;
-import core.game.facade.GameFacade;
 import core.json.model.GameInfoModel;
 import core.logging.Loggers;
 import core.logging.LynxLogger;
+import core.namespace.Extension;
 import core.namespace.Namespace;
 import core.translation.CacheFileTranslator;
 import core.translation.Translator;
 
-/**
- * Load and store all available games.
- * 
- * @author Alexis
- *
- */
 public class GameLoader {
 
     private static final LynxLogger logger = Loggers.getLogger(GameLoader.class);
@@ -57,8 +51,7 @@ public class GameLoader {
 	    if (isValidGameDirectory(gameDirectory)) {
 		Game game = loadGame(GAME_DIRECTORY.append(gameDirectory));
 		this.games.add(game);
-		logger.info("Game '{}' has successfully loaded.", game
-			.getInfo().getName());
+		logger.info("Game directory '{}' has successfully loaded.", gameDirectory);
 	    }
 	}
 	Collections.sort(this.games);
@@ -67,7 +60,7 @@ public class GameLoader {
     private boolean isValidGameDirectory(String gameDirectory) {
 	return Files.exists(GAME_DIRECTORY.append(gameDirectory)
 		.append(Game.INFO_FILE).getResolver()
-		.getFilePath(Game.INFO_FILE_EXT));
+		.getFilePath(Extension.JSON));
     }
 
     private Game loadGame(Namespace gameDirectory) {
@@ -83,8 +76,8 @@ public class GameLoader {
     private CacheFileTranslator createGameTranlator(Game game) {
 	GameInfoModel gim = game.getInfo();
 	String userLang = Translator.getValidLanguage(gim.getLanguages(),
-		this.core.getUserLang(), gim.getLanguage());
-	return new CacheFileTranslator(game.getRoot(), userLang, Core.getInstance().getSettings().getTranslatorCahceSize());
+		this.core.getUserSettings().getLang(), gim.getLanguage());
+	return new CacheFileTranslator(game.getLangRoot(), userLang, core.getAppSettings().getTranslatorCacheSize());
     }
 
     private String[] getGameDirectoriesName() {

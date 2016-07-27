@@ -1,9 +1,0 @@
-{
-    "name": "t$base.name",
-    "description": "t$base.description",
-    "langs": ["fr", "en"],
-    "lang": "fr",
-    "declare": ["i", "j"],
-    "boot": "start.start",
-    "save": false
-}

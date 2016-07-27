@@ -13,18 +13,18 @@ public class NamespaceResolver {
     }
 
     public String getDirectoryPathAsString() {
-	return namespace.getKey().replace(Namespace.NAMESPACE_SEPARATOR, File.separator);
+	return namespace.getKey().replace(Namespace.SEPARATOR, File.separator);
     }
     
     public Path getDirectoryPath() {
 	return Paths.get(getDirectoryPathAsString());
     }
     
-    public String getFilePathAsString(String extension) {
-	return getDirectoryPathAsString() + "." + extension;
+    public String getFilePathAsString(Extension extension) {
+	return getDirectoryPathAsString() + "." + extension.toString();
     }
     
-    public Path getFilePath(String extension) {
+    public Path getFilePath(Extension extension) {
 	return Paths.get(getFilePathAsString(extension));
     }
 

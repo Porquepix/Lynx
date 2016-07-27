@@ -2,13 +2,15 @@ package core.json.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AppSettingsModel {
+import core.json.JsonModel;
 
-    private boolean debug;
+public class AppSettingsModel extends JsonModel {
+
+    private boolean debug = false;
     @SerializedName("translator_cache_size")
-    private int translatorCacheSize;
+    private int translatorCacheSize = 10;
     @SerializedName("node_cache_size")
-    private int nodeCacheSize;
+    private int nodeCacheSize = 10;
 
     public AppSettingsModel() {
     }
@@ -21,7 +23,7 @@ public class AppSettingsModel {
 	return this.debug;
     }
     
-    public int getTranslatorCahceSize() {
+    public int getTranslatorCacheSize() {
 	return this.translatorCacheSize;
     }
     
