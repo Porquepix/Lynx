@@ -1,2 +1,4 @@
 /bin/
 /vendor/logs/
+/build/
+/.gradle/
