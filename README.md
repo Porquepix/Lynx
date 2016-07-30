@@ -1,5 +1,8 @@
 # Lynx 
 
+**_Current version: 1.0.0alpha1 (IN DEV)_**
+**Current phase: Migration to Gradle**
+
 This project is still in development. MANY PARTS WILL CHANGE IN THE NEXT WEEKS. 
 
 Engine to build textual games with json files.  
@@ -13,4 +16,8 @@ The core will load each games which meet those requirements:
 
 To know what properties contain the 'base.json' file, look at the Demo Game.
 
+## Config files
 
+## Translation files
+
+## Story files
