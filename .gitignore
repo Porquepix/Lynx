@@ -1,2 +1,6 @@
 /bin/
 /vendor/logs/
+/build/
+/.gradle/
+/Lynx/
+/LynxBundle/
