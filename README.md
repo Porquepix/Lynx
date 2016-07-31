@@ -13,8 +13,10 @@ Currently only a console version is available.
 
 1. Download or Clone this repository. 
 2. Go to the repository folder and open a terminal. 
-3. Run gradle with this command: `gradle build`. 
-4. The complete instalation is in the **Lynx** folder. You can now run the **Lynx.jar** file (go to the Lynx folder and then run this command: `java -jar Lynx.jar`). 
+3. Run gradle with this command: `gradle bundle`. 
+4. The complete instalation is in the **LynxBundle** folder. You can now run the **Lynx.jar** file (go to the LynxBundle folder and then run this command: `java -jar Lynx.jar`).  
+
+Note: You can change the name of the bundle folder in the `gradle.properties` file.
 
 # Configuration
 

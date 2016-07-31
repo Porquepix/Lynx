@@ -40,3 +40,59 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
 }
+
+jar {
+    manifest {
+        attributes(
+            'Implementation-Title': project.name,
+            'Implementation-Version': version,
+            'Main-Class': mainClassName,
+            'Class-Path': configurations.runtime.files.collect { 'vendor/libs/' + it.name }.join(' ')
+        )
+    }
+    archiveName 'Lynx.jar'
+}
+
+/*
+ * Package the application
+ * BUNDLE TASKS
+ */
+
+task deleteBundleDirectory(type: Delete) {
+    delete bundleDirName
+}
+
+task createBundleDirectory(dependsOn: [build, deleteBundleDirectory]) {
+    def dir = new File(bundleDirName)
+    dir.mkdir();
+}
+
+task copyMainJar(type: Copy, dependsOn: createBundleDirectory) {
+    from 'build/libs'
+    include 'Lynx.jar'
+    into bundleDirName   
+}
+
+task copyVendor(type: Copy, dependsOn: createBundleDirectory) {
+    from 'vendor'
+    exclude 'test'
+    exclude 'logs'
+    into "$bundleDirName/vendor"   
+}
+
+task copyGames(type: Copy, dependsOn: createBundleDirectory) {
+    from 'games/demo'
+    into "$bundleDirName/games/demo"
+}
+
+task copyReadMe(type: Copy, dependsOn: createBundleDirectory) {
+    from '.'
+    include 'README.md'
+    into bundleDirName
+}
+
+task bundle(group: 'Bundle', description: 'Builds the project and bundles it.', dependsOn: [createBundleDirectory, copyMainJar, copyVendor, copyGames, copyReadMe]) {
+    doLast {
+        println 'LYNX IS READY TO BE USED !'
+    }
+}
