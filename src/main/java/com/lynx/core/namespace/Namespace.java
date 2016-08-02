@@ -1,5 +1,8 @@
 package com.lynx.core.namespace;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public final class Namespace {
@@ -9,12 +12,10 @@ public final class Namespace {
 
     private String key;
     private String[] segments;
-    private NamespaceResolver resolver;
 
     public Namespace(String key) {
 	this.key = key;
 	this.segments = key.split(SEPARATOR_REGEX);
-	this.resolver = new NamespaceResolver(this);
     }
 
     public Namespace(Namespace other) {
@@ -63,8 +64,12 @@ public final class Namespace {
 	return relative;
     }
 
-    public NamespaceResolver getResolver() {
-	return this.resolver;
+    public Path getPath() {
+	return Paths.get(getPathAsString());
+    }
+
+    public String getPathAsString() {
+	return getKey().replace(Namespace.SEPARATOR, File.separator);
     }
 
     @Override

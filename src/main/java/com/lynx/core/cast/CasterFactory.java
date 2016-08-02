@@ -1,5 +1,6 @@
 package com.lynx.core.cast;
 
+
 public abstract class CasterFactory<T> {
 
     public CasterFactory() {

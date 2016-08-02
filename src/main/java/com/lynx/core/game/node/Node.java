@@ -16,9 +16,11 @@ public class Node {
 
     private NodeModel model;
     private NodeType type;
+    private IInterpreter interpreter;
 
-    protected Node(NodeModel model) {
+    protected Node(NodeModel model, IInterpreter interpreter) {
 	this.model = model;
+	this.interpreter = interpreter;
 	checkNodeValidity();
 	this.type = NodeType.getByName(model.getAnswer().getType());
     }
@@ -55,7 +57,7 @@ public class Node {
 	return getModel().getChoices();
     }
 
-    public NextModel getNext(IInterpreter interpreter) {
+    public NextModel getNext() {
 	for (NextModel next : getModel().getNexts()) {
 	    if (!next.hasCondition() || interpreter.evalCondition(next.getCondition())) {
 		return next;
@@ -63,6 +65,10 @@ public class Node {
 	}
 	logger.warn("No next node found !");
 	return null;
+    }
+
+    public boolean isDisplayable(ChoiceModel model) {
+	return !model.hasCondition() || interpreter.evalCondition(model.getCondition());
     }
 
 }

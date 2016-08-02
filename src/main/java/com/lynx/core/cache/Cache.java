@@ -2,6 +2,7 @@ package com.lynx.core.cache;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class Cache<T, K> {
 
@@ -37,15 +38,8 @@ public abstract class Cache<T, K> {
 	this.cache.clear();
     }
 
-    public K get(T key) {
-	return this.cache.get(key);
-    }
-
-    public K safeGet(T key, K value) {
-	if (!this.containsKey(key)) {
-	    this.add(key, value);
-	}
-	return this.get(key);
+    public Optional<K> get(T key) {
+	return Optional.ofNullable(this.cache.get(key));
     }
 
     public boolean containsKey(T key) {

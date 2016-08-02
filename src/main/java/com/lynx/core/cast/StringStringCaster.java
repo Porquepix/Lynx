@@ -1,5 +1,6 @@
 package com.lynx.core.cast;
 
+
 public class StringStringCaster implements StringCaster<String> {
 
     public StringStringCaster() {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lynx.core.exception.LynxException;
-import com.lynx.core.game.answer.Answer;
 
 public class GlobalValidator implements Validator {
 
@@ -20,15 +19,23 @@ public class GlobalValidator implements Validator {
 	for (Validator v : this.validators) {
 	    valid &= v.validate(data);
 	}
+	if (!valid) {
+	    logger.warn("Validation failed for request {} and validator {}", data, this);
+	}
 	return valid;
     }
 
-    public boolean validateOrFail(Answer r) {
-	boolean ret = this.validate(r);
+    public boolean validateOrFail(Object data) {
+	boolean ret = this.validate(data);
 	if (!ret) {
-	    logger.error("Validation failed for request {} and validator {}", r, this);
 	    throw new LynxException("Validation failled !");
 	}
 	return ret;
     }
+
+    @Override
+    public String toString() {
+	return validators.toString();
+    }
+
 }

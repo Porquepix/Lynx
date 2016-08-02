@@ -10,6 +10,7 @@ import com.lynx.console.commands.ClearCommand;
 import com.lynx.console.commands.ExitCommand;
 import com.lynx.console.commands.ListCommand;
 import com.lynx.console.commands.ManualCommand;
+import com.lynx.console.commands.SaveCommand;
 
 public abstract class Command implements Comparable<Command> {
 
@@ -26,6 +27,7 @@ public abstract class Command implements Comparable<Command> {
     public static final Command MAN = new ManualCommand();
     public static final Command CLEAR = new ClearCommand();
     public static final Command EXIT = new ExitCommand();
+    public static final Command SAVE = new SaveCommand();
 
     public Command() {
 	commands.put(getName(), this);

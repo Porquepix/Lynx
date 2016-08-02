@@ -2,6 +2,7 @@ package com.lynx.core.cache;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class LruCache<T, K> extends Cache<T, K> {
 
@@ -34,12 +35,11 @@ public class LruCache<T, K> extends Cache<T, K> {
     }
 
     @Override
-    public K get(T key) {
+    public Optional<K> get(T key) {
 	if (this.containsKey(key)) {
 	    refreshKeyUsage(key);
-	    return super.get(key);
 	}
-	return null;
+	return super.get(key);
     }
 
     private void refreshKeyUsage(T key) {

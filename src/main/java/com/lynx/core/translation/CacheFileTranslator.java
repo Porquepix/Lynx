@@ -61,7 +61,7 @@ public class CacheFileTranslator implements Translator {
 	if (!this.cache.containsKey(name)) {
 	    this.loadTranslator(name);
 	}
-	return this.cache.get(name);
+	return this.cache.get(name).get();
     }
 
     private void loadTranslator(Namespace name) {

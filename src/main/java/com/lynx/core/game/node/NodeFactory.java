@@ -1,5 +1,6 @@
 package com.lynx.core.game.node;
 
+import com.lynx.core.interpreter.IInterpreter;
 import com.lynx.core.logging.Loggers;
 import com.lynx.core.logging.LynxLogger;
 import com.lynx.core.namespace.Resource;
@@ -11,6 +12,6 @@ public abstract class NodeFactory {
     public NodeFactory() {
     }
 
-    public abstract Node buildNodeByIdentifier(Resource identifier);
+    public abstract Node buildNodeByIdentifier(Resource identifier, IInterpreter interpreter);
 
 }
