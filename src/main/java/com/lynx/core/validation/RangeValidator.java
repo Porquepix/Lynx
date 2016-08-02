@@ -23,7 +23,7 @@ public class RangeValidator implements Validator {
 	} else if (data instanceof Number) {
 	    return validateNumber((Number) data);
 	} else {
-	    logger.warn("Range validation failled: unknow type {}", data.getClass());
+	    logger.warn("Range validation failled: unknow type {}", data);
 	    return false;
 	}
     }
@@ -34,6 +34,11 @@ public class RangeValidator implements Validator {
 
     private boolean validateNumber(Number data) {
 	return this.min <= data.doubleValue() && data.doubleValue() < this.max;
+    }
+
+    @Override
+    public String toString() {
+	return "range: [" + min + "," + max + "[";
     }
 
 }

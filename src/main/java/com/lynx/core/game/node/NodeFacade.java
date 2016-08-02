@@ -36,7 +36,12 @@ public class NodeFacade extends Facade {
     }
 
     private List<String> choicesToString() {
-	return node.getChoices().stream().map(ChoiceModel::getText).collect(Collectors.toList());
+	return node
+		.getChoices()
+		.stream()
+		.filter((ChoiceModel model) -> node.isDisplayable(model))
+		.map(ChoiceModel::getText)
+		.collect(Collectors.toList());
     }
 
     public boolean isClosedAnswer() {

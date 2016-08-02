@@ -1,5 +1,6 @@
 package com.lynx.core.game.answer;
 
+
 public abstract class AnswerFactory {
 
     public AnswerFactory() {

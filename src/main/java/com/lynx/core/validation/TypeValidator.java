@@ -32,4 +32,9 @@ public class TypeValidator implements Validator {
 	return clazz.isAssignableFrom(data.getClass());
     }
 
+    @Override
+    public String toString() {
+	return "type: " + (strict ? "strict " : "") + clazz.getName();
+    }
+
 }

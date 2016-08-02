@@ -24,4 +24,9 @@ public class InValidator implements Validator {
 	return found;
     }
 
+    @Override
+    public String toString() {
+	return "in: " + validValues.toString();
+    }
+
 }

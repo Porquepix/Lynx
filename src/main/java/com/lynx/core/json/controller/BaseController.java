@@ -20,10 +20,12 @@ public class BaseController<T extends JsonModel> extends JsonController<T> {
 	return this.type;
     }
 
+    @Override
     public T fetch() {
 	return this.gson.fromJson(this.getReader(), this.getType());
     }
 
+    @Override
     public void store(T model) {
 	String json = this.gson.toJson(model);
 	Writer writer = this.getWriter();

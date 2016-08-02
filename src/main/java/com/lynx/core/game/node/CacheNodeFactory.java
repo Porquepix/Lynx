@@ -2,6 +2,7 @@ package com.lynx.core.game.node;
 
 import com.lynx.core.cache.Cache;
 import com.lynx.core.cache.LruCache;
+import com.lynx.core.interpreter.IInterpreter;
 import com.lynx.core.json.container.NodeContainer;
 import com.lynx.core.json.controller.NodeController;
 import com.lynx.core.json.model.NodeModel;
@@ -17,10 +18,10 @@ public class CacheNodeFactory extends NodeFactory {
     }
 
     @Override
-    public Node buildNodeByIdentifier(Resource identifier) {
+    public Node buildNodeByIdentifier(Resource identifier, IInterpreter interpreter) {
 	logger.info("Loading node '{}'", identifier.getRessourceFile());
 	NodeModel model = getNodeModel(identifier);
-	return new Node(model);
+	return new Node(model, interpreter);
     }
 
     private NodeModel getNodeModel(Resource identifier) {
@@ -28,7 +29,7 @@ public class CacheNodeFactory extends NodeFactory {
 	if (!cache.containsKey(location)) {
 	    loadNodeModel(location);
 	}
-	return cache.get(location).get(identifier.getId());
+	return cache.get(location).get().get(identifier.getId());
     }
 
     private void loadNodeModel(Namespace file) {

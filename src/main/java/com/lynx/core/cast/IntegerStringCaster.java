@@ -1,5 +1,6 @@
 package com.lynx.core.cast;
 
+
 public class IntegerStringCaster implements StringCaster<Integer> {
 
     public IntegerStringCaster() {
@@ -7,12 +8,13 @@ public class IntegerStringCaster implements StringCaster<Integer> {
 
     @Override
     public Integer cast(String source) {
+	Integer ret = null;
 	try {
-	    return Integer.parseInt(source);
+	    ret = Integer.parseInt(source);
 	} catch (Exception e) {
 	    logger.warn("Impossible to cast (string -> integer) for value '{}'", source);
 	}
-	return null;
+	return ret;
     }
 
 }

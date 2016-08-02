@@ -27,13 +27,16 @@ public class AnswerManager {
 	boolean result = false;
 
 	if (answer == null) {
+	    if (node.isSkippable()) {
+		return true;
+	    }
 	    return false;
 	}
 
 	if (node.isSkippable()) {
 	    result = true;
 	} else {
-	    result = validator.validate(answer.getValue());
+	    result = validator.validate(answer);
 
 	    if (result) {
 		addAnswerVariable(answer);

@@ -2,7 +2,6 @@ package com.lynx.core.game;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +10,7 @@ import com.lynx.core.Core;
 import com.lynx.core.json.model.GameInfoModel;
 import com.lynx.core.logging.Loggers;
 import com.lynx.core.logging.LynxLogger;
-import com.lynx.core.namespace.Extension;
+import com.lynx.core.namespace.FileFinder;
 import com.lynx.core.namespace.Namespace;
 import com.lynx.core.translation.CacheFileTranslator;
 import com.lynx.core.translation.Translator;
@@ -58,8 +57,7 @@ public class GameLoader {
     }
 
     private boolean isValidGameDirectory(String gameDirectory) {
-	return Files.exists(GAME_DIRECTORY.append(gameDirectory).append(Game.INFO_FILE)
-	        .getResolver().getFilePath(Extension.JSON));
+	return new FileFinder(GAME_DIRECTORY.append(gameDirectory).append(Game.INFO_FILE)).find() != null;
     }
 
     private Game loadGame(Namespace gameDirectory) {

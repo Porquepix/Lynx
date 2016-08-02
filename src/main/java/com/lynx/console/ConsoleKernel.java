@@ -7,6 +7,8 @@ import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 import com.lynx.core.Core;
+import com.lynx.core.cast.Caster;
+import com.lynx.core.cast.StringCasterFactory;
 import com.lynx.core.game.GameFacade;
 import com.lynx.core.game.answer.Answer;
 import com.lynx.core.game.node.NodeFacade;
@@ -78,6 +80,10 @@ public class ConsoleKernel {
     private void selectGame() {
 	List<GameFacade> games = gameCore.getGames();
 
+	Caster<String, Integer> caster = new StringCasterFactory().getCaster(Integer.class);
+	Validator validator = new GlobalValidatorBuilder().type(Integer.class, true)
+	        .range(0, games.size()).build();
+
 	String input;
 	while (!exit && selectedGame == null) {
 	    AnsiConsole.out.println("Select a game:");
@@ -96,9 +102,7 @@ public class ConsoleKernel {
 	    input = getAnswer();
 
 	    if (input != null) {
-		Answer userAnswer = new Answer(input);
-		Validator validator = new GlobalValidatorBuilder().type(Integer.class, true)
-		        .range(0, games.size()).build();
+		Answer userAnswer = new Answer(caster.cast(input));
 
 		if (validator.validate(userAnswer.getValue())) {
 		    selectedGame = games.get((int) userAnswer.getValue());
@@ -131,7 +135,7 @@ public class ConsoleKernel {
 		    }
 		}
 	    } else {
-		selectedGame.next("null");
+		selectedGame.next(null);
 	    }
 	}
     }

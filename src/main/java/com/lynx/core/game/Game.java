@@ -64,7 +64,7 @@ public class Game implements Comparable<Game> {
 
 	int cachesize = Core.getInstance().getAppSettings().getNodeCacheSize();
 	NodeFactory factory = new CacheNodeFactory(cachesize);
-	this.nodeManager = new NodeManager(storyRoot, factory);
+	this.nodeManager = new NodeManager(storyRoot, factory, interpreter);
 
 	CasterFactory<String> casterFactory = new StringCasterFactory();
 	this.answerFactory = new CastedAnswerFacotry(casterFactory);
@@ -119,7 +119,7 @@ public class Game implements Comparable<Game> {
     public boolean next(String answer) {
 	Answer a = answerManager.toAnswer(answer);
 	if (answerManager.validate(a)) {
-	    NextModel next = currentNode.getNext(interpreter);
+	    NextModel next = currentNode.getNext();
 	    interpreter.evalIfNotNull(next.getAfter());
 	    this.setCurrentNode(next.getNode());
 	    return true;

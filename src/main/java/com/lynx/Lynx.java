@@ -1,4 +1,5 @@
 package com.lynx;
+
 import com.lynx.console.ConsoleKernel;
 
 public class Lynx {

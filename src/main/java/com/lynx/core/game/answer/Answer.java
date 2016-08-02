@@ -7,7 +7,11 @@ public class Answer {
 
     public Answer(Object value) {
 	this.value = value;
-	this.clazz = value.getClass();
+	if (value != null) {
+	    this.clazz = value.getClass();
+	} else {
+	    this.clazz = Void.class;
+	}
     }
 
     public Object getValue() {

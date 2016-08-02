@@ -33,7 +33,7 @@ public class Resource {
     }
 
     public Path getRessourceFile() {
-	return namespace.getResolver().getFilePath(Extension.JSON);
+	return new FileFinder(namespace).find();
     }
 
     @Override
