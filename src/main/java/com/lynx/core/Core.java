@@ -17,77 +17,77 @@ import com.lynx.core.translation.Translator;
 
 public class Core {
 
-    private static class SingletonHolder {
-	private static final Core instance = new Core();
-    }
-
-    public enum TranslationKey {
-	MISSING_DATA;
-    }
-
-    private static final Namespace APP_CONF_FILE = new Namespace("vendor.config.app");
-    private static final Namespace USER_CONF_FILE = new Namespace("vendor.config.user");
-    private static final Namespace CORE_TRANSLATOR_ROOT = new Namespace("vendor.lang");
-    private final static LynxLogger logger = Loggers.getLogger(Core.class);
-
-    private AppSettingsModel appSettings;
-    private UserSettingsModel userSettings;
-    private Translator tranlastor;
-    private GameLoader gameManager;
-
-    private Core() {
-	logger.warn(">>> -------------------- >>> STARTING CORE <<< -------------------- <<<");
-	loadAppSettings();
-	if (appSettings.getDebug()) {
-	    Loggers.setRootLevel(Level.DEBUG);
-	    logger.warn("Application running in debug mode.");
-	    logger.logUserConfiguration();
+	private static class SingletonHolder {
+		private static final Core instance = new Core();
 	}
-	loadUserSettings();
 
-	this.tranlastor = new FileTranslator(CORE_TRANSLATOR_ROOT.append(userSettings.getLang())
-	        .append("core"));
-	this.gameManager = new GameLoader(this);
+	public enum TranslationKey {
+		MISSING_DATA;
+	}
 
-	logger.info("Core has successfully started...");
-    }
+	private static final Namespace APP_CONF_FILE = new Namespace("vendor.config.app");
+	private static final Namespace USER_CONF_FILE = new Namespace("vendor.config.user");
+	private static final Namespace CORE_TRANSLATOR_ROOT = new Namespace("vendor.lang");
+	private final static LynxLogger logger = Loggers.getLogger(Core.class);
 
-    public AppSettingsModel getAppSettings() {
-	return this.appSettings;
-    }
+	private AppSettingsModel appSettings;
+	private UserSettingsModel userSettings;
+	private Translator tranlastor;
+	private GameLoader gameManager;
 
-    private void loadAppSettings() {
-	BaseController<AppSettingsModel> appController = new BaseController<>(APP_CONF_FILE,
-	        AppSettingsModel.class);
-	this.appSettings = appController.fetch();
-	logger.info("Core settings have been successfully set...");
-    }
+	private Core() {
+		logger.warn(">>> -------------------- >>> STARTING CORE <<< -------------------- <<<");
+		loadAppSettings();
+		if ( appSettings.getDebug() ) {
+			Loggers.setRootLevel(Level.DEBUG);
+			logger.warn("Application running in debug mode.");
+			logger.logUserConfiguration();
+		}
+		loadUserSettings();
 
-    public UserSettingsModel getUserSettings() {
-	return this.userSettings;
-    }
+		this.tranlastor = new FileTranslator(CORE_TRANSLATOR_ROOT.append(userSettings.getLang())
+		        .append("core"));
+		this.gameManager = new GameLoader(this);
 
-    private void loadUserSettings() {
-	BaseController<UserSettingsModel> userController = new BaseController<>(USER_CONF_FILE,
-	        UserSettingsModel.class);
-	this.userSettings = userController.fetch();
-	logger.info("User settings have been successfully set...");
-    }
+		logger.info("Core has successfully started...");
+	}
 
-    public Translator getTranslator() {
-	return this.tranlastor;
-    }
+	public AppSettingsModel getAppSettings() {
+		return this.appSettings;
+	}
 
-    public String translate(Core.TranslationKey key) {
-	return tranlastor.translate(key.name().toLowerCase());
-    }
+	private void loadAppSettings() {
+		BaseController<AppSettingsModel> appController = new BaseController<>(APP_CONF_FILE,
+		        AppSettingsModel.class);
+		this.appSettings = appController.fetch();
+		logger.info("Core settings have been successfully set...");
+	}
 
-    public List<GameFacade> getGames() {
-	return this.gameManager.getGames();
-    }
+	public UserSettingsModel getUserSettings() {
+		return this.userSettings;
+	}
 
-    public static Core getInstance() {
-	return SingletonHolder.instance;
-    }
+	private void loadUserSettings() {
+		BaseController<UserSettingsModel> userController = new BaseController<>(USER_CONF_FILE,
+		        UserSettingsModel.class);
+		this.userSettings = userController.fetch();
+		logger.info("User settings have been successfully set...");
+	}
+
+	public Translator getTranslator() {
+		return this.tranlastor;
+	}
+
+	public String translate(Core.TranslationKey key) {
+		return tranlastor.translate(key.name().toLowerCase());
+	}
+
+	public List<GameFacade> getGames() {
+		return this.gameManager.getGames();
+	}
+
+	public static Core getInstance() {
+		return SingletonHolder.instance;
+	}
 
 }

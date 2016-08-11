@@ -3,6 +3,6 @@
     "description": "t$base.description",
     "languages": ["fr"],
     "language": "fr",
-    "declare": [],
+    "declare": ["i", "j"],
     "boot": "consil0.0"
 }

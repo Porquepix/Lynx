@@ -4,14 +4,14 @@ import com.lynx.core.translation.Translator;
 
 public abstract class Facade {
 
-    protected Translator translator;
+	protected Translator translator;
 
-    public Facade(Translator translator) {
-	this.translator = translator;
-    }
+	public Facade(Translator translator) {
+		this.translator = translator;
+	}
 
-    protected Translator getTranslator() {
-	return this.translator;
-    }
+	protected Translator getTranslator() {
+		return this.translator;
+	}
 
 }

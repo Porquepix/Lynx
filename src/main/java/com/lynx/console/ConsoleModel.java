@@ -4,13 +4,13 @@ import com.lynx.core.json.JsonModel;
 
 public class ConsoleModel extends JsonModel {
 
-    private String prompt;
+	private String prompt;
 
-    public ConsoleModel() {
-    }
+	public ConsoleModel() {
+	}
 
-    public String getPrompt() {
-	return this.prompt;
-    }
+	public String getPrompt() {
+		return this.prompt;
+	}
 
 }

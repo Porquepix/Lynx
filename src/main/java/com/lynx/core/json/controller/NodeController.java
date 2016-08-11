@@ -11,20 +11,19 @@ import com.lynx.core.namespace.Namespace;
 
 public class NodeController extends JsonController<NodeContainer> {
 
-    public NodeController(Namespace namespace) {
-	super(namespace);
-    }
+	public NodeController(Namespace namespace) {
+		super(namespace);
+	}
 
-    @Override
-    public NodeContainer fetch() {
-	Type type = new TypeToken<Map<String, NodeModel>>() {
-	}.getType();
-	return new NodeContainer(this.gson.fromJson(this.getReader(), type));
-    }
+	@Override
+	public NodeContainer fetch() {
+		Type type = new TypeToken<Map<String, NodeModel>>() {}.getType();
+		return new NodeContainer(gson.fromJson(getReader(), type));
+	}
 
-    @Override
-    public void store(NodeContainer model) {
-	throw new UnsupportedOperationException("Impossible to write on game file.");
-    }
+	@Override
+	public void store(NodeContainer model) {
+		throw new UnsupportedOperationException("Impossible to write on game file.");
+	}
 
 }

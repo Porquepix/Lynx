@@ -10,32 +10,32 @@ import com.lynx.core.logging.LynxLogger;
 
 public class LoggersTest {
 
-    private LynxLogger logger = Loggers.getLogger(LoggersTest.class);
+	private LynxLogger logger = Loggers.getLogger(LoggersTest.class);
 
-    @Test
-    public void testSingleton() {
-	assertSame(logger, Loggers.getLogger(LoggersTest.class));
-	assertNotSame(logger, Loggers.getLogger(Object.class));
-    }
+	@Test
+	public void testSingleton() {
+		assertSame(logger, Loggers.getLogger(LoggersTest.class));
+		assertNotSame(logger, Loggers.getLogger(Object.class));
+	}
 
-    @Test
-    public void testSetLevelWarn() {
-	Loggers.setRootLevel(Level.WARN);
+	@Test
+	public void testSetLevelWarn() {
+		Loggers.setRootLevel(Level.WARN);
 
-	assertTrue(logger.isErrorEnabled());
-	assertTrue(logger.isWarnEnabled());
-	assertFalse(logger.isInfoEnabled());
-	assertFalse(logger.isDebugEnabled());
-    }
+		assertTrue(logger.isErrorEnabled());
+		assertTrue(logger.isWarnEnabled());
+		assertFalse(logger.isInfoEnabled());
+		assertFalse(logger.isDebugEnabled());
+	}
 
-    @Test
-    public void testSetLevelDebug() {
-	Loggers.setRootLevel(Level.DEBUG);
+	@Test
+	public void testSetLevelDebug() {
+		Loggers.setRootLevel(Level.DEBUG);
 
-	assertTrue(logger.isErrorEnabled());
-	assertTrue(logger.isWarnEnabled());
-	assertTrue(logger.isInfoEnabled());
-	assertTrue(logger.isDebugEnabled());
-    }
+		assertTrue(logger.isErrorEnabled());
+		assertTrue(logger.isWarnEnabled());
+		assertTrue(logger.isInfoEnabled());
+		assertTrue(logger.isDebugEnabled());
+	}
 
 }

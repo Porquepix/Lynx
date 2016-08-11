@@ -8,9 +8,9 @@ import com.lynx.core.Core;
 
 public abstract class CoreTest {
 
-    @Test
-    public void testSingleton() {
-	assertSame(Core.getInstance(), Core.getInstance());
-    }
+	@Test
+	public void testSingleton() {
+		assertSame(Core.getInstance(), Core.getInstance());
+	}
 
 }

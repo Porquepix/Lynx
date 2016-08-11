@@ -1,14 +1,16 @@
 package com.lynx.core.cast;
 
+import java.util.Optional;
 
-public class StringStringCaster implements StringCaster<String> {
 
-    public StringStringCaster() {
-    }
+public class StringStringCaster implements Caster<String, String> {
 
-    @Override
-    public String cast(String source) {
-	return source;
-    }
+	public StringStringCaster() {
+	}
+
+	@Override
+	public Optional<String> cast(String source) {
+		return Optional.ofNullable(source);
+	}
 
 }
