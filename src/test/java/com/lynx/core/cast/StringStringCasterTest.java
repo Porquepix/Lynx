@@ -8,13 +8,13 @@ import com.lynx.core.cast.StringStringCaster;
 
 public class StringStringCasterTest {
 
-    private StringStringCaster caster = new StringStringCaster();
+	private StringStringCaster caster = new StringStringCaster();
 
-    @Test
-    public void testCast() {
-	assertEquals(caster.cast("test"), "test");
-	assertEquals(caster.cast(""), "");
-	assertEquals(caster.cast(null), null);
-    }
+	@Test
+	public void testCast() {
+		assertEquals(caster.cast("test").get(), "test");
+		assertEquals(caster.cast("").get(), "");
+		assertFalse(caster.cast(null).isPresent());
+	}
 
 }

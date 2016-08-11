@@ -9,47 +9,45 @@ import com.lynx.core.translation.Translator;
 
 public class NodeFacade extends Facade {
 
-    private Node node;
+	private Node node;
 
-    public NodeFacade(Node node, Translator translator) {
-	super(translator);
-	this.node = node;
-    }
-
-    public String getText() {
-	return translator.translate(node.getModel().getText());
-    }
-
-    public String getAuthor() {
-	return translator.translate(node.getModel().getAuthor());
-    }
-
-    public boolean hasAuthor() {
-	return node.getModel().hasAuthor();
-    }
-
-    public List<String> getChoices() {
-	if (isClosedAnswer()) {
-	    return translator.translateAll(choicesToString());
+	public NodeFacade(Node node, Translator translator) {
+		super(translator);
+		this.node = node;
 	}
-	return null;
-    }
 
-    private List<String> choicesToString() {
-	return node
-		.getChoices()
-		.stream()
-		.filter((ChoiceModel model) -> node.isDisplayable(model))
-		.map(ChoiceModel::getText)
-		.collect(Collectors.toList());
-    }
+	public String getText() {
+		return translator.translate(node.getModel().getText());
+	}
 
-    public boolean isClosedAnswer() {
-	return node.isClosedAnswer();
-    }
+	public String getAuthor() {
+		return translator.translate(node.getModel().getAuthor());
+	}
 
-    public boolean isSkippable() {
-	return node.isSkippable();
-    }
+	public boolean hasAuthor() {
+		return node.getModel().hasAuthor();
+	}
+
+	public List<String> getChoices() {
+		if ( isClosedAnswer() ) { return translator.translateAll(choicesToString()); }
+		return null;
+	}
+
+	private List<String> choicesToString() {
+		return node
+		        .getChoices()
+		        .stream()
+		        .filter((ChoiceModel model) -> node.isDisplayable(model))
+		        .map(ChoiceModel::getText)
+		        .collect(Collectors.toList());
+	}
+
+	public boolean isClosedAnswer() {
+		return node.isClosedAnswer();
+	}
+
+	public boolean isSkippable() {
+		return node.isSkippable();
+	}
 
 }

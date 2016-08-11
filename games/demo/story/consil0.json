@@ -1,5 +1,6 @@
 {
     "0": {
+        "init": "i = 3.14; j = 'c'",
         "author": "t$authors.intro",
         "text": "t$consil0.0",
         "answer": {

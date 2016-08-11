@@ -8,21 +8,20 @@ import com.lynx.core.namespace.Namespace;
 
 public class TranslationController extends JsonController<TranslationModel> {
 
-    public TranslationController(Namespace namespace) {
-	super(namespace);
-    }
+	public TranslationController(Namespace namespace) {
+		super(namespace);
+	}
 
-    @Override
-    public TranslationModel fetch() {
-	@SuppressWarnings("unchecked")
-	Map<String, String> translations = this.gson.fromJson(this.getReader(), Map.class);
+	@Override
+	public TranslationModel fetch() {
+		@SuppressWarnings("unchecked")
+		Map<String, String> translations = gson.fromJson(getReader(), Map.class);
+		return new TranslationModel(translations);
+	}
 
-	return new TranslationModel(translations);
-    }
-
-    @Override
-    public void store(TranslationModel model) {
-	throw new UnsupportedOperationException("Impossible to write on translation file.");
-    }
+	@Override
+	public void store(TranslationModel model) {
+		throw new UnsupportedOperationException("Impossible to write on translation file.");
+	}
 
 }

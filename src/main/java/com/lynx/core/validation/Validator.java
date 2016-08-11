@@ -5,8 +5,8 @@ import com.lynx.core.logging.LynxLogger;
 
 public interface Validator {
 
-    static final LynxLogger logger = Loggers.getLogger(Validator.class);
+	static final LynxLogger logger = Loggers.getLogger(Validator.class);
 
-    public boolean validate(Object data);
+	public boolean validate(Object data);
 
 }

@@ -12,25 +12,25 @@ import com.lynx.core.namespace.Namespace;
 
 public class TranslationControllerTest {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
-    private Namespace testFile = new Namespace("vendor.test.TranslationControllerTest");
-    private TranslationController controller = new TranslationController(testFile);
+	private Namespace testFile = new Namespace("vendor.test.TranslationControllerTest");
+	private TranslationController controller = new TranslationController(testFile);
 
-    @Test
-    public void testFetch() {
-	TranslationModel model = controller.fetch();
+	@Test
+	public void testFetch() {
+		TranslationModel model = controller.fetch();
 
-	assertEquals(model.getTranslation("hello"), "hello");
-	assertEquals(model.getTranslation("name"), "My name is John Doe");
-	assertNull(model.getTranslation("empty"));
-    }
+		assertEquals(model.getTranslation("hello"), "hello");
+		assertEquals(model.getTranslation("name"), "My name is John Doe");
+		assertNull(model.getTranslation("empty"));
+	}
 
-    @Test
-    public void testStore() {
-	thrown.expect(UnsupportedOperationException.class);
-	controller.store(controller.fetch());
-    }
+	@Test
+	public void testStore() {
+		thrown.expect(UnsupportedOperationException.class);
+		controller.store(controller.fetch());
+	}
 
 }

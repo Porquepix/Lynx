@@ -10,26 +10,26 @@ import org.junit.Test;
 
 public class FileFinderTest {
 
-    private Namespace ns1 = new Namespace("vendor.test.NodeControllerTest");
-    private FileFinder finder1 = new FileFinder(ns1, new String[] { "json", "test.txt" });
-    private Namespace ns2 = new Namespace("a.b.c");
-    private FileFinder finder2 = new FileFinder(ns2);
+	private Namespace ns1 = new Namespace("vendor.test.NodeControllerTest");
+	private FileFinder finder1 = new FileFinder(ns1, new String[] { "json", "test.txt" });
+	private Namespace ns2 = new Namespace("a.b.c");
+	private FileFinder finder2 = new FileFinder(ns2);
 
-    @Test
-    public void testFind() {
-	assertEquals(finder1.find(), Paths.get("vendor/test/NodeControllerTest.json"));
-	assertEquals(finder2.find(), null);
-    }
+	@Test
+	public void testFind() {
+		assertEquals(finder1.find().get(), Paths.get("vendor/test/NodeControllerTest.json"));
+		assertFalse(finder2.find().isPresent());
+	}
 
-    @Test
-    public void testFindPossibleFiles() {
-	List<Path> result1 = finder1.findPossibleFiles();
-	assertEquals(result1.size(), 2);
-	assertTrue(result1.contains(Paths.get("vendor/test/NodeControllerTest.json")));
-	assertTrue(result1.contains(Paths.get("vendor/test/NodeControllerTest.test.txt")));
-	
-	List<Path> result2 = finder2.findPossibleFiles();
-	assertEquals(result2.size(), 0);
-    }
+	@Test
+	public void testFindAll() {
+		List<Path> result1 = finder1.findAll();
+		assertEquals(result1.size(), 2);
+		assertTrue(result1.contains(Paths.get("vendor/test/NodeControllerTest.json")));
+		assertTrue(result1.contains(Paths.get("vendor/test/NodeControllerTest.test.txt")));
+
+		List<Path> result2 = finder2.findAll();
+		assertEquals(result2.size(), 0);
+	}
 
 }

@@ -28,5 +28,6 @@
 	<classpathentry kind="lib" path="vendor/libs/log4j-api-2.6.1.jar"/>
 	<classpathentry kind="lib" path="vendor/libs/log4j-core-2.6.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="lib" path="vendor/libs/guava-19.0.jar" sourcepath="C:/Users/Alexis/Downloads/guava-19.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

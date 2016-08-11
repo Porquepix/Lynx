@@ -1,9 +1,8 @@
 # Lynx 
 
-> **_Current version: 1.0.0alpha1 (IN DEV)_**  
-> **Current phase: Migration to Gradle**
+> **_Current version: 1.0.0 Beta (IN DEV)_** 
 
-This project is still in development. MANY PARTS WILL CHANGE IN THE NEXT WEEKS.  
+This project is still in development. SOME PARTS MAY CHANGE IN THE NEXT WEEKS.  
  
 Lynx is an engine to build textual games with json files.  
 This project is a personal project but feel free to fork it to play or to improve it. 

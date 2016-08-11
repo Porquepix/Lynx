@@ -1,11 +1,13 @@
 package com.lynx.core.cast;
 
+import java.util.Optional;
+
 
 public abstract class CasterFactory<T> {
 
-    public CasterFactory() {
-    }
+	public CasterFactory() {
+	}
 
-    public abstract <K> Caster<T, K> getCaster(Class<K> target);
+	public abstract <K> Optional<Caster<T, K>> getCaster(Class<K> target);
 
 }
